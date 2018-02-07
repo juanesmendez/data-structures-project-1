@@ -1,8 +1,9 @@
 package view;
 
 
+import java.util.Iterator;
+
 import model.data_structures.List;
-import model.data_structures.Node;
 import mundo.SistemaTaxis;
 import mundo.Taxi;
 import persistencia.ManejoArchivos;
@@ -15,37 +16,50 @@ public class Test {
 		
 		List lista = new List<Taxi>();
 		
-		Node primero = new Node<>();
-		Node segundo = new Node<>();
 		
 		Taxi miTaxi = new Taxi("1", "Taxis Libres");
 		Taxi miTaxi2 = new Taxi("2", "Tappsi");
 		
+		//Taxi t  = (Taxi) lista.createNode(miTaxi).getData();
+		//Taxi t2 = (Taxi) lista.createNode(miTaxi2).getData();
+		
+		lista.insert(miTaxi);
+		lista.insert(miTaxi2);
 		ManejoArchivos.leerArchivo(sistema);
 		
 		
-		primero.setData(miTaxi);
-		segundo.setData(miTaxi2);
 		
-		lista.insert(primero);
-		lista.insert(segundo);
+		//lista.insert(t);
+		//lista.insert(t2);
 		/*
 		for(Node n = lista.getHead();n==null;n.getNext()) {
 			System.out.println(n.getData().toString());
 		}*/
+		
+		/*
 		Node aux = lista.getHead();
 		while(aux != null) {
 			System.out.println(aux.getData().toString());
 			aux = aux.getNext();
+		}*/
+		Iterator iterator = lista.iterator();
+		
+		while(iterator.hasNext()) {
+			System.out.println(iterator.next().toString());
 		}
 		
-		lista.delete(primero);
+		
 		System.out.println();
-		aux = lista.getHead();
-		while(aux != null) {
-			System.out.println(aux.getData().toString());
-			aux = aux.getNext();
+			
+			
+		lista.delete(miTaxi);
+		iterator = lista.iterator();
+		
+		while(iterator.hasNext()) {
+			System.out.println(iterator.next().toString());
 		}
+		
+		
 	}
 
 }

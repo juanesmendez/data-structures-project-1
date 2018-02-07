@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.Scanner;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -27,17 +28,17 @@ public class ManejoArchivos {
 			String aux;
 			
 			String company;
-			String dropoffCensusTract; // Verificar si cambiar a double
+			String dropoffCensusTract; // Verify if I need to change it to double
 			String dropoffCentroidLatitude;
-			//Agregar declaracion para guardar dropoff_centroid_location
+			//Add declaration for saving dropoff_centroid_location in a variable
 			String dropoffCentroidLongitude;
 			int dropoffCommunityArea;
-			float extras; //Chequear si dejar int o cambiar a otro tipo de dato
+			float extras; //Check if leaving it as an integer or if it is better to change it to another type
 			float fare;
 			String paymentType;
 			String pickupCensusTract;
 			String pickupCentroidLatitude;
-			//Agregar declaracion para guardar pickup_centroid_location
+			//Add variable declaration for saving pickup_centroid_location
 			String pickupCentroidLongitude;
 			int pickupCommunityArea;
 			String idTaxi;
@@ -53,7 +54,7 @@ public class ManejoArchivos {
 				System.out.println("Dropoff Census Tract: "+dropoffCensusTract);
 				dropoffCentroidLatitude = (String) jsonObject.get("dropoff_centroid_latitude");
 				System.out.println("Dropoff Centroid Latitude: "+dropoffCentroidLatitude);
-				// Agregar dropoff_centroid_location que es un arreglo
+				//Add dropoff_centroid_location which is an array
 				dropoffCentroidLongitude = (String) jsonObject.get("dropoff_centroid_longitude");
 				System.out.println("Dropoff Centroid Longitude: "+dropoffCentroidLongitude);
 				aux = (String) jsonObject.get("dropoff_community_area");
@@ -61,7 +62,7 @@ public class ManejoArchivos {
 					dropoffCommunityArea = Integer.parseInt(aux);
 					System.out.println("Dropoff Community Area: "+dropoffCommunityArea);
 				}else {
-					dropoffCommunityArea = 0; //Si el community area es null asigno un 0, significa que no hay informacion del community area
+					dropoffCommunityArea = 0; //If community area is null assign 0, it means that there is no information about the community area
 					System.out.println("Dropoff Community Area: "+dropoffCommunityArea);
 				}
 				aux = (String) jsonObject.get("extras");
@@ -76,7 +77,7 @@ public class ManejoArchivos {
 				System.out.println("Pickup Census Tract: "+pickupCensusTract);
 				pickupCentroidLatitude = (String) jsonObject.get("pickup_centroid_latitude");
 				System.out.println("Pickup Centroid Latitude: "+pickupCentroidLatitude);
-				// Añadir pickup_centroid_location
+				// Add pickup_centroid_location
 				pickupCentroidLongitude = (String) jsonObject.get("pickup_centroid_longitude");
 				System.out.println("Pickup Centroid Longitude: "+pickupCentroidLongitude);
 				aux = (String) jsonObject.get("pickup_community_area");
@@ -84,7 +85,7 @@ public class ManejoArchivos {
 					pickupCommunityArea = Integer.parseInt(aux);
 					System.out.println("Pickup Community Area: "+pickupCommunityArea);
 				}else {
-					pickupCommunityArea = 0; //Si el community area es null asigno un 0, significa que no hay informacion del community area
+					pickupCommunityArea = 0; //If community area is null assign 0, it means that there is not enough information about the community area.
 					System.out.println("Pickup Community Area: "+pickupCommunityArea);
 				}
 				idTaxi = (String) jsonObject.get("taxi_id");
@@ -95,14 +96,9 @@ public class ManejoArchivos {
 				aux = (String) jsonObject.get("tolls");
 				tolls = Float.parseFloat(aux);
 				System.out.println("Tolls: "+tolls);
-				//Continuar aca
+				//Continue here
 				System.out.println();
 			}
-			//JSONObject jsonObject = (JSONObject) obj;
-			
-			//String company = (String) jsonObject.get("company");
-			//System.out.println(company); 
-		
 		}catch(FileNotFoundException e) {
 			e.printStackTrace();
 		}catch(IOException e) {
@@ -112,6 +108,5 @@ public class ManejoArchivos {
 		} catch(Exception e){
 			e.printStackTrace();
 		}
-		 
 	}
 }
