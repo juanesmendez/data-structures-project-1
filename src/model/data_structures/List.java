@@ -2,37 +2,39 @@ package model.data_structures;
 
 import java.util.Iterator;
 
-public class List<T> implements Iterable<T>{
+import model.data_structures.List.Node;
 
+public class List<T extends Comparable<T>> implements LinkedList<T> ,Iterable<T>{
 	private Node head;
+	private Node last;
 	private int size;
-	private Iterator<T> iterator;
-	
+	private Node current;
+	//Add reference to last one
 	public List() {
 		this.head = null;
 		this.size = 0;
 		//Iterator initialization missing
 	}
 	
-	public class Node<T> {
-		T data;
+	public class Node<T extends Comparable<T>> {
+		T item;
 		Node next;
 		
 		public Node() {
-			this.data = null;
+			this.item = null;
 			this.next = null;
 		}
-		public Node(T data) {
-			this.data = data;
+		public Node(T item) {
+			this.item = item;
 			this.next = null;
 		}
 
-		public T getData() {
-			return data;
+		public T getItem() {
+			return item;
 		}
 
-		public void setData(T data) {
-			this.data = data;
+		public void setItem(T item) {
+			this.item = item;
 		}
 
 		public Node getNext() {
@@ -44,27 +46,116 @@ public class List<T> implements Iterable<T>{
 		}
 		
 	}
-	
-	public T getHead() {
-		return (T) head.getData();
+
+	@Override
+	public void add(T item) {
+		// TODO Auto-generated method stub
+		Node<T> node = new Node<T>(item);
+		if(this.head == null) {
+			this.head = node;
+			this.last = node;
+			this.size++;
+		}else {
+			Node<T> aux = this.last;
+			aux.setNext(node);
+			this.last = node;
+			this.size++;
+		}
 	}
 
-	public int getSize() {
-		return size;
+	@Override
+	public void delete(T item) {
+		// TODO Auto-generated method stub
+		if(this.head!=null) {
+			Node<T> aux = this.head;
+			if(aux.getItem() == item) {
+				this.head = aux.getNext();
+				aux = null;
+				if(this.head.getNext() == null) {
+					this.last = this.head;
+				}
+				this.size--;
+			}else {
+				while(aux.getNext()!=null) {
+					if(aux.getNext().getItem() == item) {
+						Node<T> temp = aux.getNext();
+						Node<T> siguiente = temp.getNext();
+						temp = null;
+						aux.setNext(siguiente);
+						if(siguiente == null) {
+							this.last = aux;
+						}
+						this.size--;
+						break;
+					}
+					aux = aux.getNext();
+				}
+			}
+		}
 	}
 
+	@Override
+	public T get(T item) {
+		// TODO Auto-generated method stub
+		
+		//In this method I need to use method compareTo from the T object. If it finds it, return the object with all of the information.
+		Node<T> aux = this.head;
+		while(aux != null) {
+			if(aux.getItem().compareTo(item) == 0) {
+				return aux.getItem();
+			}
+			aux = aux.getNext();
+		}
+		return null;
+	}
 
-	public void setSize(int size) {
-		this.size = size;
+	@Override
+	public int size() {
+		// TODO Auto-generated method stub
+		return this.size;
 	}
-	
-	public Node createNode(T data) {
-		Node node = new Node<T>(data);
-		return node;
+
+	@Override
+	public T get(int pos) {
+		// TODO Auto-generated method stub
+		T data = null;
+		int cont = 0;
+		
+		Node<T> aux = this.head;
+		
+		while(aux !=null) {
+			if(cont == pos) {
+				data = aux.getItem();
+				return data;
+			}
+			aux = aux.getNext();
+			cont++;
+		}
+		return data;
 	}
+
+	@Override
+	public void listing() {
+		// TODO Auto-generated method stub
+		this.current = this.head;
+	}
+
+	@Override
+	public T getCurrent() {
+		// TODO Auto-generated method stub
+		return (T) this.current.getItem();
+	}
+
+	@Override
+	public T next() {
+		// TODO Auto-generated method stub
+		this.current = this.current.next;
+		return (T) this.current.getItem();
+	}
+
 	
-	public void insertBeginning(T data) {
-		Node node = new Node<T>(data);
+	public void addBeginning(T item) {
+		Node node = new Node<T>(item);
 		if(this.head == null) {
 			this.head = node;
 			this.size++;
@@ -75,49 +166,15 @@ public class List<T> implements Iterable<T>{
 			this.size++;
 		}
 	}
-	public void insert(T data) {
-		Node<T> node = new Node<T>(data);
-		if(this.head == null) {
-			insertBeginning(data);
-		}else {
-			Node<T> aux = this.head;
-			while(aux.getNext() != null) {
-				aux = aux.getNext();
-			}
-			aux.setNext(node);
-			this.size++;
-		}
-	}
-	public void delete(T data) {
-		
-		if(this.head!=null) {
-			Node<T> aux = this.head;
-			if(aux.getData() == data) {
-				this.head = aux.getNext();
-				this.size--;
-			}else {
-				while(aux.getNext()!=null) {
-					if(aux.getNext().getData() == data) {
-						Node<T> temp = aux.getNext();
-						Node<T> siguiente = temp.getNext();
-						temp = null;
-						aux.setNext(siguiente);
-						this.size--;
-						break;
-					}
-					aux = aux.getNext();
-				}
-			}
-		}
-		
-	}
+
 
 	@Override
 	public Iterator<T> iterator() {
 		// TODO Auto-generated method stub
-		return new listIterator();
+		return new ListIterator();
 	}
-	private class listIterator implements Iterator<T>{
+	
+	private class ListIterator implements Iterator<T>{
 		private Node current = head;
 
 		@Override
@@ -130,9 +187,10 @@ public class List<T> implements Iterable<T>{
 		public T next() {
 			// TODO Auto-generated method stub
 			
-			T data = (T) current.getData();
+			T item = (T) current.getItem();
 			current = current.getNext();
-			return data;
+			return item;
 		}
 	}
+
 }

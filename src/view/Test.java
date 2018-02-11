@@ -1,65 +1,51 @@
 package view;
 
+import java.util.Stack;
 
-import java.util.Iterator;
-
-import model.data_structures.List;
-import mundo.SistemaTaxis;
-import mundo.Taxi;
-import persistencia.ManejoArchivos;
+import model.data_structures.Queue;
+import model.world.Taxi;
 
 public class Test {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		SistemaTaxis sistema = new SistemaTaxis();
+
 		
-		List lista = new List<Taxi>();
-		
-		
-		Taxi miTaxi = new Taxi("1", "Taxis Libres");
-		Taxi miTaxi2 = new Taxi("2", "Tappsi");
-		
-		//Taxi t  = (Taxi) lista.createNode(miTaxi).getData();
-		//Taxi t2 = (Taxi) lista.createNode(miTaxi2).getData();
-		
-		lista.insert(miTaxi);
-		lista.insert(miTaxi2);
-		ManejoArchivos.leerArchivo(sistema);
+		Stack<Taxi> pila = new Stack<>();
+		Taxi aux;
+		Taxi tax1 = new Taxi("1", "Taxis Libres");
+		Taxi taxi2 = new Taxi("2", "Tappsi");
+		Taxi taxi3 = new Taxi("3", "Taxis Cheveres");
 		
 		
-		
-		//lista.insert(t);
-		//lista.insert(t2);
-		/*
-		for(Node n = lista.getHead();n==null;n.getNext()) {
-			System.out.println(n.getData().toString());
-		}*/
-		
-		/*
-		Node aux = lista.getHead();
-		while(aux != null) {
-			System.out.println(aux.getData().toString());
-			aux = aux.getNext();
-		}*/
-		Iterator iterator = lista.iterator();
-		
-		while(iterator.hasNext()) {
-			System.out.println(iterator.next().toString());
-		}
-		
-		
+		// Trying out Stack
+		System.out.println("Stack:");
 		System.out.println();
-			
-			
-		lista.delete(miTaxi);
-		iterator = lista.iterator();
+		pila.push(tax1);
+		pila.push(taxi2);
+		pila.push(taxi3);
 		
-		while(iterator.hasNext()) {
-			System.out.println(iterator.next().toString());
+		while(!pila.isEmpty()) {
+			System.out.println("Size: "+pila.size());
+			aux = pila.pop();
+			System.out.println(aux.toString());
+			System.out.println();
 		}
 		
+		//Trying Queue
+		System.out.println("Queue:");
+		System.out.println();
+		Queue<Taxi> cola = new Queue<>();
 		
+		cola.enqueue(tax1);
+		cola.enqueue(taxi2);
+		cola.enqueue(taxi3);
+		
+		while(!cola.isEmpty()) {
+			System.out.println(cola.dequeue());
+		}
+		System.out.println("Size:"+cola.size());
 	}
+	
 
 }

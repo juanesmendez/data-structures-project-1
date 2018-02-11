@@ -11,12 +11,12 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import mundo.SistemaTaxis;
+import api.ITaxiTripsManager;
 
 public class ManejoArchivos {
 
 	
-	public static void leerArchivo(SistemaTaxis sistema) {
+	public static void leerArchivo(ITaxiTripsManager manager) {
 		JSONParser parser = new JSONParser();
 		
 		try {
@@ -50,6 +50,7 @@ public class ManejoArchivos {
 				jsonObject = (JSONObject) iterator.next();
 				company = (String) jsonObject.get("company");
 				System.out.println("Company: "+company);
+				
 				dropoffCensusTract = (String) jsonObject.get("dropoff_census_tract");
 				System.out.println("Dropoff Census Tract: "+dropoffCensusTract);
 				dropoffCentroidLatitude = (String) jsonObject.get("dropoff_centroid_latitude");
