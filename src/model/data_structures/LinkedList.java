@@ -15,7 +15,7 @@ import java.util.Iterator;
  * next: advance to next element in the listing (return if it exists)
  * @param <T>
  */
-public interface LinkedList <T extends Comparable<T>>  {
+public interface LinkedList <T extends Comparable<T>> extends Iterable<T> {
 	
 	
 	public void add(T item);

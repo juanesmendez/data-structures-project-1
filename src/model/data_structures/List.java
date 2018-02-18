@@ -1,6 +1,7 @@
 package model.data_structures;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import model.data_structures.List.Node;
 
@@ -186,11 +187,15 @@ public class List<T extends Comparable<T>> implements LinkedList<T> ,Iterable<T>
 		@Override
 		public T next() {
 			// TODO Auto-generated method stub
+			if(current == null) {
+				throw new NoSuchElementException("There is no current"); //It knows the exception because Iterator interface implements excepions
+			}
 			
 			T item = (T) current.getItem();
 			current = current.getNext();
 			return item;
 		}
+		
 	}
 
 }

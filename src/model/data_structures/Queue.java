@@ -1,9 +1,13 @@
 package model.data_structures;
 
-import model.data_structures.Stack.Node;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-public class Queue <T extends Comparable<T>>{
+import model.data_structures.Queue.Node;
 
+public class Queue <T extends Comparable<T>> implements IQueue<T> {
+
+	
 	private Node first;
 	private Node last;
 	private int size;
@@ -45,7 +49,11 @@ public class Queue <T extends Comparable<T>>{
 		
 	}
 	
+	
+	
+	@Override
 	public void enqueue(T item) {
+		// TODO Auto-generated method stub
 		Node<T> node = new Node<T>(item);
 		if(isEmpty()) {
 			this.first = node;
@@ -57,8 +65,10 @@ public class Queue <T extends Comparable<T>>{
 			this.size++;
 		}
 	}
-	
+
+	@Override
 	public T dequeue() {
+		// TODO Auto-generated method stub
 		T item = (T) this.first.getItem();
 		this.first = this.first.getNext();
 		this.size--;
@@ -67,16 +77,52 @@ public class Queue <T extends Comparable<T>>{
 		}
 		return item;
 	}
-	
+
+	@Override
 	public boolean isEmpty() {
+		// TODO Auto-generated method stub
 		if(this.size == 0) {
 			return true;
 		}else {
 			return false;
 		}
 	}
+
+	@Override
+	public Iterator<T> iterator() {
+		// TODO Auto-generated method stub
+		return new ListIterator();
+	}
 	
+	private class ListIterator implements Iterator<T>{
+		private Node current = first;
+
+		@Override
+		public boolean hasNext() {
+			// TODO Auto-generated method stub
+			return current != null;
+		}
+
+		@Override
+		public T next() {
+			// TODO Auto-generated method stub
+			if(current == null) {
+				throw new NoSuchElementException("There is no current"); //It knows the exception because Iterator interface implements excepions
+			}
+			
+			T item = (T) current.getItem();
+			current = current.getNext();
+			return item;
+		}
+		
+	}
+
+
+
+	@Override
 	public int size() {
+		// TODO Auto-generated method stub
 		return this.size;
 	}
+
 }

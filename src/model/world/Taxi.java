@@ -3,11 +3,11 @@ package model.world;
 public class Taxi implements Comparable<Taxi>{
 
 	private String taxiId;
-	private String company;
+	private Company company;
 	
-	public Taxi(String taxiId,String company) {
+	public Taxi(String taxiId) {
 		this.taxiId = taxiId;
-		this.company = company;
+		this.company = null;
 	}
 	
 	/**
@@ -21,11 +21,15 @@ public class Taxi implements Comparable<Taxi>{
 	/**
 	 * @return company
 	 */
-	public String getCompany() {
+	public Company getCompany() {
 		// TODO Auto-generated method stub
 		return this.company;
 	}
 	
+	public void setCompany(Company company) {
+		this.company = company;
+	}
+
 	@Override
 	public int compareTo(Taxi o) {
 		// TODO Auto-generated method stub
