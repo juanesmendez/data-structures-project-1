@@ -161,31 +161,41 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 				//Continue here
 				//Parsing date timestamp
 				auxDate = (String) jsonObject.get("trip_end_timestamp");
-				StringTokenizer tokenizer = new StringTokenizer(auxDate, "-");
-				year = Integer.parseInt(tokenizer.nextToken());
-				month = Integer.parseInt(tokenizer.nextToken());
-				aux = tokenizer.nextToken();
-				tokenizer = new StringTokenizer(aux, ":");
-				day = Integer.parseInt(tokenizer.nextToken("T"));
-				aux = tokenizer.nextToken();
-				tokenizer = new StringTokenizer(aux, ":");
-				hour = Integer.parseInt(tokenizer.nextToken());
-				minutes = Integer.parseInt(tokenizer.nextToken());
-				aux=tokenizer.nextToken();
-				tokenizer = new StringTokenizer(aux, ".");
-				seconds = Integer.parseInt(tokenizer.nextToken());
-				nanoseconds = Integer.parseInt(tokenizer.nextToken());
-				tripEnd = LocalDateTime.of(year, month, day, hour, minutes, seconds, nanoseconds);
-				System.out.println("Trip end timestamp: "+tripEnd.toString());
+				if(auxDate == null) {
+					tripEnd = null;
+					System.out.println("Trip end timestamp: NO HAY INFORMACION");
+				}else {
+					StringTokenizer tokenizer = new StringTokenizer(auxDate, "-");
+					year = Integer.parseInt(tokenizer.nextToken());
+					month = Integer.parseInt(tokenizer.nextToken());
+					aux = tokenizer.nextToken();
+					tokenizer = new StringTokenizer(aux, ":");
+					day = Integer.parseInt(tokenizer.nextToken("T"));
+					aux = tokenizer.nextToken();
+					tokenizer = new StringTokenizer(aux, ":");
+					hour = Integer.parseInt(tokenizer.nextToken());
+					minutes = Integer.parseInt(tokenizer.nextToken());
+					aux=tokenizer.nextToken();
+					tokenizer = new StringTokenizer(aux, ".");
+					seconds = Integer.parseInt(tokenizer.nextToken());
+					nanoseconds = Integer.parseInt(tokenizer.nextToken());
+					tripEnd = LocalDateTime.of(year, month, day, hour, minutes, seconds, nanoseconds);
+					System.out.println("Trip end timestamp: "+tripEnd.toString());
+				}
+				
 				idTrip = (String) jsonObject.get("trip_id");
 				System.out.println("Trip id: "+idTrip);
 				aux = (String) jsonObject.get("trip_miles");
 				tripMiles = Float.parseFloat(aux);
 				System.out.println("Trip Miles: "+tripMiles);
 				aux = (String) jsonObject.get("trip_seconds");
+				if(aux == null) {
+					aux = "0";
+				}
 				tripSeconds = Integer.parseInt(aux);
 				System.out.println("Trip seconds: "+tripSeconds);
 				auxDate = (String) jsonObject.get("trip_start_timestamp");
+				StringTokenizer tokenizer;
 				tokenizer = new StringTokenizer(auxDate, "-");
 				year = Integer.parseInt(tokenizer.nextToken());
 				month = Integer.parseInt(tokenizer.nextToken());
@@ -228,9 +238,10 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 			e.printStackTrace();
 		} catch(Exception e){
 			e.printStackTrace();
+		}finally {
+			cargo = true;
 		}
-		
-		cargo = true;
+
 		return cargo;
 	}
 

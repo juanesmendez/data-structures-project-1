@@ -3,11 +3,11 @@ package view;
 import java.util.Scanner;
 
 import controller.Controller;
+import model.data_structures.IQueue;
 import model.data_structures.IStack;
+import model.data_structures.LinkedList;
 import model.logic.TaxiTripsManager;
-import model.world.DateTimeRange;
-import model.world.InfoTaxiRange;
-import model.world.ServicesValuePayed;
+import model.world.*;
 
 public class TaxiTripsManagerView {
 
@@ -209,7 +209,7 @@ public class TaxiTripsManagerView {
 				String horaFinalReq2B = sc.next();
 
 				//Compania
-				System.out.println("Ingrese el nobre de la compa�ia");
+				System.out.println("Ingrese el nombre de la compa�ia");
 				String compania2B=sc.next();
 
 				//VORangoFechaHora
