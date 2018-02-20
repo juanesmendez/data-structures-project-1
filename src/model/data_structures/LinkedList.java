@@ -19,6 +19,7 @@ public interface LinkedList <T extends Comparable<T>> extends Iterable<T> {
 	
 	
 	public void add(T item);
+	public void addInOrder(T item);
 	public void delete(T item);
 	public T get(T item);
 	public int size();
@@ -27,4 +28,6 @@ public interface LinkedList <T extends Comparable<T>> extends Iterable<T> {
 	public T getCurrent();
 	public T next();
 	public Iterator<T> iterator();
+	//Prueba
+	public T getLast();
 }

@@ -19,6 +19,7 @@ import model.data_structures.IQueue;
 import model.data_structures.IStack;
 import model.data_structures.LinkedList;
 import model.data_structures.List;
+import model.data_structures.Queue;
 import model.world.CommunityAreaByDateRange;
 import model.world.Company;
 import model.world.CompanyByDateRange;
@@ -39,10 +40,15 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 	public static final String DIRECCION_LARGE_JSON = "./data/taxi-trips-wrvz-psew-subset-large.json";
 	
 	
-	private List<Service> services;
-	private List<Company> companies;
-	private List<Taxi> taxis;
-
+	private LinkedList<Service> services;
+	private LinkedList<Company> companies;
+	private LinkedList<Taxi> taxis;
+	
+	public TaxiTripsManager() {
+		this.services = new List<>();
+		this.companies = new List<>();
+		this.taxis = new List<>();
+	}
 	
 	// 1C
 	@Override
@@ -57,11 +63,6 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 
 			JSONArray jsonArray = (JSONArray)obj;
 			JSONObject jsonObject;
-
-			//Instantiating lists
-			this.companies = new List<Company>();
-			this.services = new List<Service>();
-			this.taxis = new List<Taxi>();
 			
 			String aux;
 
@@ -111,59 +112,59 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 				if(companyName == null) {
 					companyName = "Independent";
 				}
-				System.out.println("Company: "+companyName);
+				//System.out.println("Company: "+companyName);
 				dropoffCensusTract = (String) jsonObject.get("dropoff_census_tract");
-				System.out.println("Dropoff Census Tract: "+dropoffCensusTract);
+				//System.out.println("Dropoff Census Tract: "+dropoffCensusTract);
 				dropoffCentroidLatitude = (String) jsonObject.get("dropoff_centroid_latitude");
-				System.out.println("Dropoff Centroid Latitude: "+dropoffCentroidLatitude);
+				//System.out.println("Dropoff Centroid Latitude: "+dropoffCentroidLatitude);
 				//Add dropoff_centroid_location which is an array
 				dropoffCentroidLongitude = (String) jsonObject.get("dropoff_centroid_longitude");
-				System.out.println("Dropoff Centroid Longitude: "+dropoffCentroidLongitude);
+				//System.out.println("Dropoff Centroid Longitude: "+dropoffCentroidLongitude);
 				aux = (String) jsonObject.get("dropoff_community_area");
 				if(aux!=null) {
 					dropoffCommunityArea = Integer.parseInt(aux);
-					System.out.println("Dropoff Community Area: "+dropoffCommunityArea);
+					//System.out.println("Dropoff Community Area: "+dropoffCommunityArea);
 				}else {
 					dropoffCommunityArea = 0; //If community area is null assign 0, it means that there is no information about the community area
-					System.out.println("Dropoff Community Area: "+dropoffCommunityArea);
+					//System.out.println("Dropoff Community Area: "+dropoffCommunityArea);
 				}
 				aux = (String) jsonObject.get("extras");
 				extras = Float.parseFloat(aux);
-				System.out.println("Extras: "+extras);
+				//System.out.println("Extras: "+extras);
 				aux = (String) jsonObject.get("fare");
 				fare = Float.parseFloat(aux);
-				System.out.println("Fare: "+fare);
+				//System.out.println("Fare: "+fare);
 				paymentType = (String) jsonObject.get("payment_type");
-				System.out.println("Payment Type: "+paymentType);
+				//System.out.println("Payment Type: "+paymentType);
 				pickupCensusTract = (String) jsonObject.get("pickup_census_tract");
-				System.out.println("Pickup Census Tract: "+pickupCensusTract);
+				//System.out.println("Pickup Census Tract: "+pickupCensusTract);
 				pickupCentroidLatitude = (String) jsonObject.get("pickup_centroid_latitude");
-				System.out.println("Pickup Centroid Latitude: "+pickupCentroidLatitude);
+				//System.out.println("Pickup Centroid Latitude: "+pickupCentroidLatitude);
 				// Add pickup_centroid_location which is an array
 				pickupCentroidLongitude = (String) jsonObject.get("pickup_centroid_longitude");
-				System.out.println("Pickup Centroid Longitude: "+pickupCentroidLongitude);
+				//System.out.println("Pickup Centroid Longitude: "+pickupCentroidLongitude);
 				aux = (String) jsonObject.get("pickup_community_area");
 				if(aux!=null) {
 					pickupCommunityArea = Integer.parseInt(aux);
-					System.out.println("Pickup Community Area: "+pickupCommunityArea);
+				//	System.out.println("Pickup Community Area: "+pickupCommunityArea);
 				}else {
 					pickupCommunityArea = 0; //If community area is null assign 0, it means that there is not enough information about the community area.
-					System.out.println("Pickup Community Area: "+pickupCommunityArea);
+				//	System.out.println("Pickup Community Area: "+pickupCommunityArea);
 				}
 				idTaxi = (String) jsonObject.get("taxi_id");
-				System.out.println("Taxi ID: "+idTaxi);
+				//System.out.println("Taxi ID: "+idTaxi);
 				aux = (String) jsonObject.get("tips");
 				tips = Float.parseFloat(aux);
-				System.out.println("Tips: "+tips);
+				//System.out.println("Tips: "+tips);
 				aux = (String) jsonObject.get("tolls");
 				tolls = Float.parseFloat(aux);
-				System.out.println("Tolls: "+tolls);
+				//System.out.println("Tolls: "+tolls);
 				//Continue here
 				//Parsing date timestamp
 				auxDate = (String) jsonObject.get("trip_end_timestamp");
 				if(auxDate == null) {
 					tripEnd = null;
-					System.out.println("Trip end timestamp: NO HAY INFORMACION");
+				//	System.out.println("Trip end timestamp: NO HAY INFORMACION");
 				}else {
 					StringTokenizer tokenizer = new StringTokenizer(auxDate, "-");
 					year = Integer.parseInt(tokenizer.nextToken());
@@ -180,20 +181,20 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 					seconds = Integer.parseInt(tokenizer.nextToken());
 					nanoseconds = Integer.parseInt(tokenizer.nextToken());
 					tripEnd = LocalDateTime.of(year, month, day, hour, minutes, seconds, nanoseconds);
-					System.out.println("Trip end timestamp: "+tripEnd.toString());
+				//	System.out.println("Trip end timestamp: "+tripEnd.toString());
 				}
 				
 				idTrip = (String) jsonObject.get("trip_id");
-				System.out.println("Trip id: "+idTrip);
+				//System.out.println("Trip id: "+idTrip);
 				aux = (String) jsonObject.get("trip_miles");
 				tripMiles = Float.parseFloat(aux);
-				System.out.println("Trip Miles: "+tripMiles);
+				//System.out.println("Trip Miles: "+tripMiles);
 				aux = (String) jsonObject.get("trip_seconds");
 				if(aux == null) {
 					aux = "0";
 				}
 				tripSeconds = Integer.parseInt(aux);
-				System.out.println("Trip seconds: "+tripSeconds);
+				//System.out.println("Trip seconds: "+tripSeconds);
 				auxDate = (String) jsonObject.get("trip_start_timestamp");
 				StringTokenizer tokenizer;
 				tokenizer = new StringTokenizer(auxDate, "-");
@@ -211,24 +212,29 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 				seconds = Integer.parseInt(tokenizer.nextToken());
 				nanoseconds = Integer.parseInt(tokenizer.nextToken());
 				tripStart = LocalDateTime.of(year, month, day, hour, minutes, seconds, nanoseconds);
-				System.out.println("Trip start timestamp: " +tripStart.toString());
+				//System.out.println("Trip start timestamp: " +tripStart.toString());
 				aux = (String) jsonObject.get("trip_total");
 				tripTotal = Float.parseFloat(aux);
-				System.out.println("Trip total: "+tripTotal);
+				//System.out.println("Trip total: "+tripTotal);
 				
 				// From here I start CREATING WORLD CLASSES
 				
-				
+				//Add to list in alphabetical order.
 				company = this.addCompany(companyName); //Return object always gonna be different to null
 				taxi = this.addTaxi(idTaxi); //Return object always gonna be different to null
 				//Associating company object to taxi object and adding taxi to company's list:
 				this.associateCompanyToTaxi(taxi, company);
 				this.addTaxiToCompany(taxi, company);
 				
+				service = this.addService(idTrip, companyName, extras, fare, paymentType, tips, tolls, tripEnd, tripStart, dropoffCommunityArea, pickupCommunityArea, tripSeconds, tripMiles, tripTotal);
+				this.addServiceToTaxi(taxi, service);
+				this.associateTaxiToService(taxi, service);
 				
 				
+				//CONTINUAR CON VERIFICAR ORDENAMIENTO DE LISTA DE COMPAÑIAS 
 				
-				System.out.println();
+				
+				//System.out.println();
 			}
 		}catch(FileNotFoundException e) {
 			e.printStackTrace();
@@ -241,6 +247,28 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 		}finally {
 			cargo = true;
 		}
+		
+		//ACA CHEQUEO ISNTANCIAMIENTO CORRECTO DEL MUNDO
+		/*
+		System.out.println("COMPAÑIAS:");
+		for(Company c: this.companies) {
+			System.out.println(c.toString());
+		}*/
+		/*
+		for(Taxi t:this.taxis) {
+			System.out.println("Taxi ID: "+t.getTaxiId().toString());
+		}*/
+		
+		System.out.println();
+		for(Company c:this.companies) {
+			System.out.println("Compañia: "+c.toString());
+			for(Taxi t: c.getTaxis()) {
+				System.out.println("\t\tTaxi ID: "+t.getTaxiId());
+				for(Service s: t.getServices()) {
+					System.out.println("\t\t\t\t\t\tService ID: "+s.getTripId());
+				}
+			}
+		}
 
 		return cargo;
 	}
@@ -248,6 +276,43 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 	@Override
 	public IQueue<Service> darServiciosEnPeriodo(DateTimeRange rango) {
 		// TODO Auto-generated method stub
+		IQueue<Service> cola = new Queue<Service>();
+		int initialYear;
+		int initialMonth;
+		int initialDay;
+		int initialHour;
+		int initialMinutes;
+		int initialSeconds;
+		int initialNanoSeconds;
+		
+		String aux;
+		String initialDate = rango.getInitialDate();
+		String initialTime = rango.getInitialHour();
+		
+		String endDate = rango.getEndDate();
+		String endTime = rango.getEndHour();
+		
+		StringTokenizer tokenizer = new StringTokenizer(initialDate, "-");
+		initialYear = Integer.parseInt(tokenizer.nextToken());
+		initialMonth = Integer.parseInt(tokenizer.nextToken());
+		initialDay = Integer.parseInt(tokenizer.nextToken());
+		tokenizer = new StringTokenizer(initialTime, ":");
+		initialHour = Integer.parseInt(tokenizer.nextToken());
+		initialMinutes = Integer.parseInt(tokenizer.nextToken());
+		aux = tokenizer.nextToken();
+		System.out.println("AUX: "+aux);
+		tokenizer = new StringTokenizer(aux, ".");
+		initialSeconds = Integer.parseInt(tokenizer.nextToken());
+		System.out.println("Initial seconds: "+initialSeconds);
+		//System.out.println("SIGUIENTE TOKEN: "+tokenizer.nextToken());
+		initialNanoSeconds = Integer.parseInt(tokenizer.nextToken());
+		System.out.println("nanoseconds: "+initialNanoSeconds);
+		//System.out.println("initi nanoseconds: "+initialNanoSeconds);
+		LocalDateTime initialDateTime = LocalDateTime.of(initialYear, initialMonth, initialDay, initialHour, initialMinutes, initialSeconds, initialNanoSeconds);
+		
+		for(Service service: this.services) {
+		}
+		
 		return null;
 	}
 
@@ -329,7 +394,8 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 		aux = this.companies.get(company);
 		
 		if(aux == null) {
-			  this.companies.add(company);
+			  //this.companies.add(company);
+			this.companies.addInOrder(company);
 		}else {
 			company = aux;
 		}
@@ -343,11 +409,20 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 		aux = this.taxis.get(taxi);
 		
 		if(aux == null) {
-			this.taxis.add(taxi);
+			//this.taxis.add(taxi);
+			this.taxis.addInOrder(taxi);
 		}else {
 			taxi = aux;
 		}
 		return taxi;
+	}
+	
+	public Service addService(String idTrip, String companyName, float extras, float fare, String paymentType, float tips, float tolls, LocalDateTime tripEnd, LocalDateTime tripStart, int dropoffCommunityArea, int pickupCommunityArea, int tripSeconds, double tripMiles, double tripTotal) {
+		Service service = new Service(idTrip, companyName, extras, fare, paymentType, tips, tolls, tripEnd, tripStart, dropoffCommunityArea, pickupCommunityArea, tripSeconds, tripMiles, tripTotal);
+		//this.services.add(service);
+		this.services.addInOrder(service);
+		return service;
+		
 	}
 
 	public void associateCompanyToTaxi(Taxi taxi,Company company) {
@@ -360,5 +435,15 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 
 	public void addTaxiToCompany(Taxi taxi, Company company) {
 		company.addTaxi(taxi);
+	}
+	
+	public void addServiceToTaxi(Taxi taxi, Service service) {
+		taxi.addService(service);
+	}
+	
+	public void associateTaxiToService(Taxi taxi, Service service) {
+		if(service.getTaxi() == null) {
+			service.setTaxi(taxi);
+		}
 	}
 }

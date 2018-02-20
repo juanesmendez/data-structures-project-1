@@ -4,12 +4,10 @@ import model.data_structures.List;
 
 public class Company implements Comparable<Company>{
 	private String name;
-	private int numTaxis;
 	private List<Taxi> taxis;
 
 	public Company(String name) {
 		this.name = name;
-		this.numTaxis = 0;
 		this.taxis = new List<>();
 	}
 
@@ -22,13 +20,10 @@ public class Company implements Comparable<Company>{
 		this.name = name;
 	}
 
-
-	public int getNumTaxis() {
-		return numTaxis;
-	}
-
-	public void setNumTaxis(int numTaxis) {
-		this.numTaxis = numTaxis;
+	
+	
+	public List<Taxi> getTaxis() {
+		return taxis;
 	}
 
 	@Override
@@ -55,7 +50,8 @@ public class Company implements Comparable<Company>{
 		Taxi aux;
 		aux = this.taxis.get(taxi);
 		if(aux == null) {
-			this.taxis.add(taxi);
+			//this.taxis.add(taxi);
+			this.taxis.addInOrder(taxi);
 		}
 	}
 

@@ -47,7 +47,10 @@ public class List<T extends Comparable<T>> implements LinkedList<T> ,Iterable<T>
 		}
 		
 	}
-
+	//Borrar despues
+	public T getLast() {
+		return (T) this.last.getItem();
+	}
 	@Override
 	public void add(T item) {
 		// TODO Auto-generated method stub
@@ -64,6 +67,67 @@ public class List<T extends Comparable<T>> implements LinkedList<T> ,Iterable<T>
 		}
 	}
 
+	@Override
+	public void addInOrder(T item) {
+		// TODO Auto-generated method stub
+		Node<T> node = new Node<T>(item);
+		Node<T> aux;
+		Node<T> temp;
+		Node<T> anterior = null;
+		if(this.head == null) {
+			this.head = node;
+			this.last = node;
+			this.size++;
+		}else {
+			aux = this.head;
+			while(aux != null) {
+				if(aux == this.head) {
+					if(node.getItem().compareTo(aux.getItem())<0 || node.getItem().compareTo(aux.getItem()) == 0) {
+						if(this.size == 1) {
+							temp = this.head;
+							this.head = node;
+							node.setNext(temp);
+							this.last = temp;
+							this.size++;
+							break;
+						}else {
+							temp = this.head;
+							this.head = node;
+							node.setNext(temp);
+							this.size++;
+							break;
+						}
+					}else {
+						if(this.size == 1) {
+							aux.setNext(node);
+							this.last = node;
+							this.size++;
+							break;
+						}
+					}
+				}else {
+					if(node.getItem().compareTo(aux.getItem()) < 0 || node.getItem().compareTo(aux.getItem()) == 0){
+						anterior.setNext(node);
+						node.setNext(aux);
+						this.size++;
+						break;
+					}else {
+						if(aux == this.last) {
+							temp = this.last;
+							temp.setNext(node);
+							this.last = node;
+							this.size++;
+							break;
+						}
+					}
+				}
+				anterior = aux;
+				aux = aux.getNext();
+			}
+		}
+	
+	}
+	
 	@Override
 	public void delete(T item) {
 		// TODO Auto-generated method stub
@@ -197,5 +261,7 @@ public class List<T extends Comparable<T>> implements LinkedList<T> ,Iterable<T>
 		}
 		
 	}
+
+	
 
 }

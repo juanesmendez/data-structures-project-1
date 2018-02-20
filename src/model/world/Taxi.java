@@ -1,13 +1,18 @@
 package model.world;
 
+import model.data_structures.LinkedList;
+import model.data_structures.List;
+
 public class Taxi implements Comparable<Taxi>{
 
 	private String taxiId;
 	private Company company;
+	private LinkedList<Service> services;
 	
 	public Taxi(String taxiId) {
 		this.taxiId = taxiId;
 		this.company = null;
+		this.services = new List<>();
 	}
 	
 	/**
@@ -28,6 +33,11 @@ public class Taxi implements Comparable<Taxi>{
 	
 	public void setCompany(Company company) {
 		this.company = company;
+	}
+
+	
+	public LinkedList<Service> getServices() {
+		return services;
 	}
 
 	@Override
@@ -71,5 +81,11 @@ public class Taxi implements Comparable<Taxi>{
 		return false;
 	}
 	
+	public void addService(Service service) {
+		//Check if its necessary to verify if the Service already exists;
+		
+		//this.services.add(service);
+		this.services.addInOrder(service);
+	}
 }
 

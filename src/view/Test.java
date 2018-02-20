@@ -12,11 +12,49 @@ public class Test {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
-		//Carga de Archivos JSON
+		
+		LinkedList<Taxi> lista = new List<>();
+		
+		Taxi taxi1 = new Taxi("1");
+		Taxi taxi2 = new Taxi("2");
+		Taxi taxi3 = new Taxi("3");
+		Taxi taxi4 = new Taxi("4");
+		Taxi taxi5 = new Taxi("5");
+		Taxi taxi6 = new Taxi("6");
+		Taxi taxi7 = new Taxi("7");
+		
+		Taxi taxi42 = new Taxi("4");
 		
 		
+		lista.addInOrder(taxi4);
+		lista.addInOrder(taxi7);
+		lista.addInOrder(taxi42);
+		/*
+		lista.addInOrder(taxi4);
+		System.out.println(lista.getLast().getTaxiId());
+		lista.addInOrder(taxi5);
+		System.out.println(lista.getLast().getTaxiId());
+		lista.addInOrder(taxi1);
+		System.out.println(lista.getLast().getTaxiId());
+		lista.addInOrder(taxi6);
+		System.out.println(lista.getLast().getTaxiId());*/
+		//lista.addInOrder(taxi1);
+		/*
+		lista.addInOrder(taxi2);
+		lista.addInOrder(taxi1);
+		lista.addInOrder(taxi5);
+		lista.addInOrder(taxi3);
+		lista.addInOrder(taxi7);
+		lista.addInOrder(taxi6);
+		*/
+		for(Taxi t:lista) {
+			System.out.println("Taxi ID: "+t.getTaxiId());
+		}
+		System.out.println();
+		System.out.println("Size: "+lista.size());
 		
+		
+		/*
 		Company company1 = new Company("Taxis Libres");
 		Company company2 = new Company("Tappsi");
 		Company company3 = new Company("Taxis Cheveres");
@@ -75,7 +113,7 @@ public class Test {
 		while(!cola.isEmpty()) {
 			System.out.println(cola.dequeue().toString());
 		}
-		System.out.println("Size:"+cola.size());
+		System.out.println("Size:"+cola.size());*/
 	}
 	
 
