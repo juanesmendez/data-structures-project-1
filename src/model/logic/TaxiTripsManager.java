@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.StringTokenizer;
@@ -20,6 +21,7 @@ import model.data_structures.IStack;
 import model.data_structures.LinkedList;
 import model.data_structures.List;
 import model.data_structures.Queue;
+import model.logic.utils.Utils;
 import model.world.CommunityAreaByDateRange;
 import model.world.Company;
 import model.world.CompanyByDateRange;
@@ -249,26 +251,29 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 		}
 		
 		//ACA CHEQUEO ISNTANCIAMIENTO CORRECTO DEL MUNDO
-		/*
+		
 		System.out.println("COMPAÑIAS:");
 		for(Company c: this.companies) {
 			System.out.println(c.toString());
-		}*/
+		}
 		/*
 		for(Taxi t:this.taxis) {
 			System.out.println("Taxi ID: "+t.getTaxiId().toString());
 		}*/
-		
+		/*
 		System.out.println();
 		for(Company c:this.companies) {
 			System.out.println("Compañia: "+c.toString());
 			for(Taxi t: c.getTaxis()) {
 				System.out.println("\t\tTaxi ID: "+t.getTaxiId());
+				System.out.println("\t\tSize Services List: "+t.getServices().size());
 				for(Service s: t.getServices()) {
 					System.out.println("\t\t\t\t\t\tService ID: "+s.getTripId());
+					
 				}
+				
 			}
-		}
+		}*/
 
 		return cargo;
 	}
@@ -277,50 +282,67 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 	public IQueue<Service> darServiciosEnPeriodo(DateTimeRange rango) {
 		// TODO Auto-generated method stub
 		IQueue<Service> cola = new Queue<Service>();
-		int initialYear;
-		int initialMonth;
-		int initialDay;
-		int initialHour;
-		int initialMinutes;
-		int initialSeconds;
-		int initialNanoSeconds;
+		LinkedList<Service> listaAux = new List<Service>();
+		LocalDateTime array[];
+		array = Utils.convertDateTimeRangeToLocalDateTimeArray(rango);
+
+		LocalDateTime initialDate = array[0];
+		LocalDateTime endDate = array[1];
 		
-		String aux;
-		String initialDate = rango.getInitialDate();
-		String initialTime = rango.getInitialHour();
+		Comparator<Service> comparator = new Service.TripStartComparator();
 		
-		String endDate = rango.getEndDate();
-		String endTime = rango.getEndHour();
-		
-		StringTokenizer tokenizer = new StringTokenizer(initialDate, "-");
-		initialYear = Integer.parseInt(tokenizer.nextToken());
-		initialMonth = Integer.parseInt(tokenizer.nextToken());
-		initialDay = Integer.parseInt(tokenizer.nextToken());
-		tokenizer = new StringTokenizer(initialTime, ":");
-		initialHour = Integer.parseInt(tokenizer.nextToken());
-		initialMinutes = Integer.parseInt(tokenizer.nextToken());
-		aux = tokenizer.nextToken();
-		System.out.println("AUX: "+aux);
-		tokenizer = new StringTokenizer(aux, ".");
-		initialSeconds = Integer.parseInt(tokenizer.nextToken());
-		System.out.println("Initial seconds: "+initialSeconds);
-		//System.out.println("SIGUIENTE TOKEN: "+tokenizer.nextToken());
-		initialNanoSeconds = Integer.parseInt(tokenizer.nextToken());
-		System.out.println("nanoseconds: "+initialNanoSeconds);
-		//System.out.println("initi nanoseconds: "+initialNanoSeconds);
-		LocalDateTime initialDateTime = LocalDateTime.of(initialYear, initialMonth, initialDay, initialHour, initialMinutes, initialSeconds, initialNanoSeconds);
-		
-		for(Service service: this.services) {
+		for(Service s:this.services) {
+			if(((s.getTripStart().compareTo(initialDate) > 0 || s.getTripStart().compareTo(initialDate) == 0) && (s.getTripStart().compareTo(endDate) < 0 || s.getTripStart().compareTo(endDate)==0)) 
+					&& ((s.getTripEnd().compareTo(initialDate) > 0 || s.getTripEnd().compareTo(initialDate) == 0) && (s.getTripEnd().compareTo(endDate) < 0 || s.getTripEnd().compareTo(endDate)==0))) {
+				
+				listaAux.add(s, comparator);
+			}
 		}
-		
-		return null;
+		for(Service s:listaAux) {
+			cola.enqueue(s);
+		}
+		return cola;
 	}
 
 
 	@Override
 	public Taxi darTaxiConMasServiciosEnCompaniaYRango(DateTimeRange rango, String company) {
 		// TODO Auto-generated method stub
-		return null;
+		Company comp;
+		Company compABuscar = new Company(company);
+		Taxi taxi = null;
+		int mayor = 0;
+		int contServicios = 0;
+		LocalDateTime array[] = Utils.convertDateTimeRangeToLocalDateTimeArray(rango);
+		LocalDateTime initialDate = array[0];
+		LocalDateTime endDate = array[1];
+
+
+		comp = this.companies.get(compABuscar);
+
+		if(comp != null) {
+			for(Taxi t:comp.getTaxis()) {
+				contServicios = 0;
+				System.out.println("Taxi ID :"+t.getTaxiId() );
+				for(Service s:t.getServices()) {
+					if(((s.getTripStart().compareTo(initialDate) > 0 || s.getTripStart().compareTo(initialDate) == 0) && (s.getTripStart().compareTo(endDate) < 0 || s.getTripStart().compareTo(endDate)==0)) 
+							&& ((s.getTripEnd().compareTo(initialDate) > 0 || s.getTripEnd().compareTo(initialDate) == 0) && (s.getTripEnd().compareTo(endDate) < 0 || s.getTripEnd().compareTo(endDate)==0))) {
+						contServicios++;	
+						
+					}
+				}
+				System.out.println("\t\tContador Servicios: "+contServicios);
+				if(contServicios > mayor) {
+					mayor = contServicios;
+					taxi = t;
+				}
+			}
+		}else {
+			System.out.println("NO se encontro la compañia");
+		}
+		System.out.println();
+		System.out.println("MAYOR NUMERO DE SERVICIOS EN RANGO: "+mayor);
+		return taxi;
 	}
 
 

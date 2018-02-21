@@ -1,5 +1,6 @@
 package model.data_structures;
 
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -66,7 +67,42 @@ public class List<T extends Comparable<T>> implements LinkedList<T> ,Iterable<T>
 			this.size++;
 		}
 	}
-
+	
+	@Override
+	public boolean add(T item, Comparator<T> comparator) {
+		// TODO Auto-generated method stub
+		boolean respuesta = false; 
+		Node<T> node = new Node<T>(item);
+		if (this.head == null){ 
+			this.head = node;
+			respuesta = true;
+		}else if ( comparator.compare(item, (T) this.head.getItem())<0){
+			node.setNext(this.head);
+			this.head = node;
+			respuesta = true;
+		}else if(comparator.compare(item, (T)this.head.getItem())>0) {
+			Node<T> anterior = this.head;
+			Node<T> actual = this.head.getNext();
+			while(actual!=null && comparator.compare(item, (T) actual.getItem())>0) {
+				anterior = actual;
+				actual = actual.getNext();
+			}
+			//Chequear si sí es <=0
+			if(actual == null || comparator.compare(item, (T)actual.getItem()) <= 0) {
+				anterior.setNext(node);
+				node.setNext(actual);
+				respuesta = true;
+			}
+			
+		}
+		
+		if(respuesta == true) {
+			this.size++;
+		}
+		return respuesta;
+		
+	}
+	
 	@Override
 	public void addInOrder(T item) {
 		// TODO Auto-generated method stub
@@ -261,6 +297,7 @@ public class List<T extends Comparable<T>> implements LinkedList<T> ,Iterable<T>
 		}
 		
 	}
+	
 
 	
 

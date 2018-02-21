@@ -98,6 +98,10 @@ public class TaxiTripsManagerView {
 
 				//Se obtiene la queue dada el rango
 				IQueue<Service> colaReq1A = Controller.darServiciosEnRango(rangoReq1A);
+				
+				for(Service s:colaReq1A) {
+					System.out.println("Service ID: "+s.getTripId()+"\t\tTrip Start Date: "+s.getTripStart());
+				}
 				//TODO 
 				//Recorra la cola y muestre cada servicio en ella
 				break;
@@ -106,8 +110,9 @@ public class TaxiTripsManagerView {
 
 				//comany
 				System.out.println("Ingrese el nombre de la compa��a");
-				String companyReq2A = sc.next();
-
+				String companyReq2A = sc.nextLine();
+				companyReq2A = sc.nextLine();
+				System.out.println("NOMBRE COMPAÑIA: "+companyReq2A);
 				//fecha inicial
 				System.out.println("Ingrese la fecha inicial (Ej : 2017-02-01)");
 				String fechaInicialReq2A = sc.next();
@@ -128,6 +133,7 @@ public class TaxiTripsManagerView {
 				DateTimeRange rangoReq2A = new DateTimeRange(fechaInicialReq2A, fechaFinalReq2A, horaInicialReq2A, horaFinalReq2A);
 				Taxi taxiReq2A = Controller.darTaxiConMasServiciosEnCompaniaYRango(rangoReq2A, companyReq2A);
 
+				System.out.println(taxiReq2A.toString());
 				//TODO
 				//Muestre la info del taxi
 

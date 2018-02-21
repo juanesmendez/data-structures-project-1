@@ -54,7 +54,7 @@ public class Taxi implements Comparable<Taxi>{
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return "Taxi ID: "+this.taxiId+"\nCompany: "+this.company;
+		return "Taxi ID: "+this.taxiId+"\n "+this.company.toString();
 	}
 
 	@Override

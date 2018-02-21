@@ -1,5 +1,6 @@
 package model.data_structures;
 
+import java.util.Comparator;
 import java.util.Iterator;
 
 /**
@@ -20,6 +21,7 @@ public interface LinkedList <T extends Comparable<T>> extends Iterable<T> {
 	
 	public void add(T item);
 	public void addInOrder(T item);
+	public boolean add(T item, Comparator<T> comparator);
 	public void delete(T item);
 	public T get(T item);
 	public int size();
