@@ -116,7 +116,10 @@ public class Service implements Comparable<Service> {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return "Trip ID: "+this.tripId+"\nTaxi ID: "+this.taxi.getTaxiId()+"\nCompany: "+this.company+"\nExtras: "+this.extras+"\nFare: "+this.fare+"\nPayment Type: "+this.paymentType+"\nTips: "+this.tips+"\nTolls: "+this.tolls+"\nTrip End: "+this.tripEnd.toString()+"\nTrip Start :"+this.tripStart.toString()+"\nDropoff Community Area: "+this.dropoffCommunityArea+"\nPickup Community Area: "+this.pickupCommunityArea+"\nTrip Seconds: "+this.tripSeconds+"\nTrip Miles: "+this.tripMiles+"\nTrip Total: "+this.tripTotal;
+		return "Trip ID: "+this.tripId+"\nTaxi ID: "+this.taxi.getTaxiId()+"\nCompany: "+this.company+"\nExtras: "+this.extras+"\nFare: "+this.fare+"\nPayment Type: "+
+				this.paymentType+"\nTips: "+this.tips+"\nTolls: "+this.tolls+"\nTrip End: "+this.tripEnd.toString()+"\nTrip Start :"+this.tripStart.toString()+
+				"\nDropoff Community Area: "+this.dropoffCommunityArea+"\nPickup Community Area: "+this.pickupCommunityArea+"\nTrip Seconds: "+
+				this.tripSeconds+"\nTrip Miles: "+this.tripMiles+"\nTrip Total: "+this.tripTotal;
 	}
 	
 	@Override

@@ -251,15 +251,15 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 		}
 		
 		//ACA CHEQUEO ISNTANCIAMIENTO CORRECTO DEL MUNDO
-		
+		/*
 		System.out.println("COMPAÑIAS:");
 		for(Company c: this.companies) {
 			System.out.println(c.toString());
-		}
-		/*
+		}*/
+		
 		for(Taxi t:this.taxis) {
 			System.out.println("Taxi ID: "+t.getTaxiId().toString());
-		}*/
+		}
 		/*
 		System.out.println();
 		for(Company c:this.companies) {
@@ -317,7 +317,6 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 		LocalDateTime initialDate = array[0];
 		LocalDateTime endDate = array[1];
 
-
 		comp = this.companies.get(compABuscar);
 
 		if(comp != null) {
@@ -349,7 +348,37 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 	@Override
 	public InfoTaxiRange darInformacionTaxiEnRango(String id, DateTimeRange rango) {
 		// TODO Auto-generated method stub
-		return null;
+		InfoTaxiRange infoTaxi = null;
+		Taxi taxiABuscar = new Taxi(id);
+		
+		LocalDateTime array[] = Utils.convertDateTimeRangeToLocalDateTimeArray(rango);
+		LocalDateTime initialDate = array[0];
+		LocalDateTime endDate = array[1];
+		
+		Taxi taxi = this.taxis.get(taxiABuscar);
+		
+		if(taxi!=null) {
+			String idTaxi = taxi.getTaxiId();
+			String company = taxi.getCompany().getName();
+			double moneyEarned=0;
+			double totalDistanceTraveled = 0;
+			int totalTime = 0;
+			LinkedList<Service> servicesInRange = new List<>();
+			for(Service s: taxi.getServices()) {
+				if(((s.getTripStart().compareTo(initialDate) > 0 || s.getTripStart().compareTo(initialDate) == 0) && (s.getTripStart().compareTo(endDate) < 0 || s.getTripStart().compareTo(endDate)==0)) 
+						&& ((s.getTripEnd().compareTo(initialDate) > 0 || s.getTripEnd().compareTo(initialDate) == 0) && (s.getTripEnd().compareTo(endDate) < 0 || s.getTripEnd().compareTo(endDate)==0))) {
+					moneyEarned += s.getTripTotal();
+					totalDistanceTraveled += s.getTripMiles();
+					totalTime += s.getTripSeconds();
+					servicesInRange.add(s);
+				}
+			}
+			infoTaxi = new InfoTaxiRange(idTaxi, rango, company, moneyEarned, totalDistanceTraveled, totalTime, servicesInRange);
+		}else {
+			System.out.println("No se encontro el taxi");
+		}
+		
+		return infoTaxi;
 	}
 
 

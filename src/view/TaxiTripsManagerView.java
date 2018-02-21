@@ -62,8 +62,14 @@ public class TaxiTripsManagerView {
 				long startTime = System.nanoTime();
 
 				//Cargar data
-				Controller.cargarSistema(linkJson);
-
+				boolean cargo = false;
+				cargo = Controller.cargarSistema(linkJson);
+				if(cargo) {
+					System.out.println("SE HA CARGADO EL SISTEMA EXITOSAMENTE.");
+					System.out.println();
+				}
+				
+				
 				//Tiempo en cargar
 				long endTime = System.nanoTime();
 				long duration = (endTime - startTime)/(1000000);
@@ -99,11 +105,12 @@ public class TaxiTripsManagerView {
 				//Se obtiene la queue dada el rango
 				IQueue<Service> colaReq1A = Controller.darServiciosEnRango(rangoReq1A);
 				
-				for(Service s:colaReq1A) {
-					System.out.println("Service ID: "+s.getTripId()+"\t\tTrip Start Date: "+s.getTripStart());
-				}
+				
 				//TODO 
 				//Recorra la cola y muestre cada servicio en ella
+				for(Service s:colaReq1A) {
+					System.out.println("Service ID: "+s.getTripId()+"\t\tTrip Start Date: "+s.getTripStart()); //Check if it's only necessary to print these attributes or to use the toString()
+				}
 				break;
 
 			case 3: //2A
@@ -133,10 +140,10 @@ public class TaxiTripsManagerView {
 				DateTimeRange rangoReq2A = new DateTimeRange(fechaInicialReq2A, fechaFinalReq2A, horaInicialReq2A, horaFinalReq2A);
 				Taxi taxiReq2A = Controller.darTaxiConMasServiciosEnCompaniaYRango(rangoReq2A, companyReq2A);
 
-				System.out.println(taxiReq2A.toString());
+				
 				//TODO
 				//Muestre la info del taxi
-
+				System.out.println(taxiReq2A.toString());
 				break;
 
 			case 4: //3A
@@ -167,6 +174,15 @@ public class TaxiTripsManagerView {
 
 				//TODO
 				//Muestre la info del taxi
+				System.out.println();
+				System.out.println("INFORMACION TAXI:");
+				System.out.println();
+				if(taxiReq3A!=null) {
+					System.out.println(taxiReq3A.toString());
+				}else {
+					System.out.println("No se encontro el taxi en el sistema.");
+					System.out.println();
+				}
 
 				break;
 

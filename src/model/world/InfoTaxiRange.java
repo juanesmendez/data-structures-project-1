@@ -14,14 +14,14 @@ public class InfoTaxiRange {
 	
 	
 	
-	public InfoTaxiRange(String idTaxi, DateTimeRange range, String company, double moneyEarned,double totalDistanceTraveled, int totalTime) {
+	public InfoTaxiRange(String idTaxi, DateTimeRange range, String company, double moneyEarned,double totalDistanceTraveled, int totalTime, LinkedList<Service> servicesInRange) {
 		this.idTaxi = idTaxi;
 		this.range = range;
 		this.company = company;
 		this.moneyEarned = moneyEarned;
 		this.totalDistanceTraveled = totalDistanceTraveled;
 		this.totalTime = totalTime;
-		this.servicesInRange = new List<Service>();
+		this.servicesInRange = servicesInRange;
 	}
 	public String getIdTaxi() {
 		return idTaxi;
@@ -63,6 +63,11 @@ public class InfoTaxiRange {
 		return servicesInRange;
 	}
 	
-	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "Taxi ID: "+this.idTaxi+"\nCompany: "+this.company+"\nMoney earned: "+this.moneyEarned+"\nTotal distance traveled: "+
+				this.totalDistanceTraveled+"\nTotal time: "+this.totalTime+"\nNumber of services: "+this.servicesInRange.size();
+	}
 	
 }
