@@ -37,14 +37,28 @@ public class DistanceRange implements Comparable<DistanceRange> {
 	public void setServicesInRange(LinkedList<Service> servicesInRange) {
 		this.servicesInRange = servicesInRange;
 	}
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "Lower Limit: "+this.lowerLimit+" Upper Limit: "+this.upperLimit;
+	}
 
 	@Override
 	public int compareTo(DistanceRange distRange) {
 		// TODO Auto-generated method stub
-		
+		if(this.lowerLimit < distRange.lowerLimit) {
+			return -1;
+		}else if(this.lowerLimit > distRange.lowerLimit) {
+			return 1;
+		}
 		return 0;
 	}
 	
+	public void addService(Service s) {
+		if(s!=null) {
+			this.servicesInRange.add(s);
+		}
+	}
 	
 	
 }

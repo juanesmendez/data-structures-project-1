@@ -66,6 +66,7 @@ public class TaxiTripsManagerView {
 				cargo = Controller.cargarSistema(linkJson);
 				if(cargo) {
 					System.out.println("SE HA CARGADO EL SISTEMA EXITOSAMENTE.");
+					System.out.println("SE ARMO EL DISEÑO DEL SISTEMA CON TODAS SUS LISTAS Y RELACIONES ENTRE CLASES. CADA CLASE ORDENADA POR CRITERIOS DISTINTOS.");
 					System.out.println();
 				}
 				
@@ -203,8 +204,19 @@ public class TaxiTripsManagerView {
 				LinkedList<DistanceRange> listaReq4A = Controller.darListaRangosDistancia(fechaReq4A, horaInicialReq4A, horaFinalReq4A);
 
 				//TODO
+				
 				//Recorra la lista y por cada VORangoDistancia muestre los servicios
-
+				System.out.println();
+				for(DistanceRange distRange:listaReq4A) {
+					System.out.println(distRange.toString());
+					System.out.println();
+					for(Service s: distRange.getServicesInRange()) {
+						System.out.println(s.toString());
+						System.out.println();
+					}
+					System.out.println();
+					System.out.println();
+				}
 				break;
 
 			case 6: //1B

@@ -1,6 +1,8 @@
 package model.logic.utils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.StringTokenizer;
 
 import model.world.DateTimeRange;
@@ -59,5 +61,32 @@ public class Utils {
 		
 		
 		return array;
+	}
+	
+	public static LocalDate obtainLocalDateObject(String date) {
+		
+		StringTokenizer tokenizer = new StringTokenizer(date, "-");
+		int year = Integer.parseInt(tokenizer.nextToken());
+		int month = Integer.parseInt(tokenizer.nextToken());
+		int day = Integer.parseInt(tokenizer.nextToken());
+		System.out.println(year);
+		System.out.println(month);
+		System.out.println(day);
+		LocalDate localDateObject = LocalDate.of(year, month, day);
+		
+		return localDateObject;
+	}
+	
+	public static LocalTime obtainLocalTimeObject(String time) {
+		LocalTime timeObject;
+		StringTokenizer tokenizer = new StringTokenizer(time,":");
+		int hour = Integer.parseInt(tokenizer.nextToken());
+		int minutes = Integer.parseInt(tokenizer.nextToken());
+		tokenizer = new StringTokenizer(tokenizer.nextToken(), ".");
+		int seconds = Integer.parseInt(tokenizer.nextToken());
+		int nanoseconds = Integer.parseInt(tokenizer.nextToken());
+		
+		timeObject = LocalTime.of(hour, minutes, seconds, nanoseconds);
+		return timeObject;
 	}
 }

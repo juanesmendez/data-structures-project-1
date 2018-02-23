@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
@@ -59,10 +60,16 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 		
 		boolean cargo = false;
 		JSONParser parser = new JSONParser();
-
+		int contServicios = 0;
+		
+		this.services = new List<>();
+		this.companies = new List<>();
+		this.taxis = new List<>();
+		
 		try {
 			Object obj = parser.parse(new FileReader(serviceFile));
-
+			
+			
 			JSONArray jsonArray = (JSONArray)obj;
 			JSONObject jsonObject;
 			
@@ -165,7 +172,7 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 				//Parsing date timestamp
 				auxDate = (String) jsonObject.get("trip_end_timestamp");
 				if(auxDate == null) {
-					tripEnd = null;
+					tripEnd = LocalDateTime.now(); //Assigning actual date
 				//	System.out.println("Trip end timestamp: NO HAY INFORMACION");
 				}else {
 					StringTokenizer tokenizer = new StringTokenizer(auxDate, "-");
@@ -190,7 +197,7 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 				//System.out.println("Trip id: "+idTrip);
 				aux = (String) jsonObject.get("trip_miles");
 				tripMiles = Float.parseFloat(aux);
-				//System.out.println("Trip Miles: "+tripMiles);
+				System.out.println("Trip Miles: "+tripMiles);
 				aux = (String) jsonObject.get("trip_seconds");
 				if(aux == null) {
 					aux = "0";
@@ -198,22 +205,28 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 				tripSeconds = Integer.parseInt(aux);
 				//System.out.println("Trip seconds: "+tripSeconds);
 				auxDate = (String) jsonObject.get("trip_start_timestamp");
-				StringTokenizer tokenizer;
-				tokenizer = new StringTokenizer(auxDate, "-");
-				year = Integer.parseInt(tokenizer.nextToken());
-				month = Integer.parseInt(tokenizer.nextToken());
-				aux = tokenizer.nextToken();
-				tokenizer = new StringTokenizer(aux, ":");
-				day = Integer.parseInt(tokenizer.nextToken("T"));
-				aux = tokenizer.nextToken();
-				tokenizer = new StringTokenizer(aux, ":");
-				hour = Integer.parseInt(tokenizer.nextToken());
-				minutes = Integer.parseInt(tokenizer.nextToken());
-				aux=tokenizer.nextToken();
-				tokenizer = new StringTokenizer(aux, ".");
-				seconds = Integer.parseInt(tokenizer.nextToken());
-				nanoseconds = Integer.parseInt(tokenizer.nextToken());
-				tripStart = LocalDateTime.of(year, month, day, hour, minutes, seconds, nanoseconds);
+				
+				if(auxDate == null) {
+					tripStart = LocalDateTime.now();
+				}else {
+					StringTokenizer tokenizer;
+					tokenizer = new StringTokenizer(auxDate, "-");
+					year = Integer.parseInt(tokenizer.nextToken());
+					month = Integer.parseInt(tokenizer.nextToken());
+					aux = tokenizer.nextToken();
+					tokenizer = new StringTokenizer(aux, ":");
+					day = Integer.parseInt(tokenizer.nextToken("T"));
+					aux = tokenizer.nextToken();
+					tokenizer = new StringTokenizer(aux, ":");
+					hour = Integer.parseInt(tokenizer.nextToken());
+					minutes = Integer.parseInt(tokenizer.nextToken());
+					aux=tokenizer.nextToken();
+					tokenizer = new StringTokenizer(aux, ".");
+					seconds = Integer.parseInt(tokenizer.nextToken());
+					nanoseconds = Integer.parseInt(tokenizer.nextToken());
+					tripStart = LocalDateTime.of(year, month, day, hour, minutes, seconds, nanoseconds);
+				}
+				
 				//System.out.println("Trip start timestamp: " +tripStart.toString());
 				aux = (String) jsonObject.get("trip_total");
 				tripTotal = Float.parseFloat(aux);
@@ -235,7 +248,7 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 				
 				//CONTINUAR CON VERIFICAR ORDENAMIENTO DE LISTA DE COMPAÑIAS 
 				
-				
+				contServicios++;
 				//System.out.println();
 			}
 		}catch(FileNotFoundException e) {
@@ -256,10 +269,10 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 		for(Company c: this.companies) {
 			System.out.println(c.toString());
 		}*/
-		
+		/*
 		for(Taxi t:this.taxis) {
 			System.out.println("Taxi ID: "+t.getTaxiId().toString());
-		}
+		}*/
 		/*
 		System.out.println();
 		for(Company c:this.companies) {
@@ -274,7 +287,9 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 				
 			}
 		}*/
-
+		System.out.println();
+		System.out.println("Se cargaron "+contServicios+ "datos del .JSON.");
+		System.out.println();
 		return cargo;
 	}
 
@@ -385,7 +400,43 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 	@Override
 	public LinkedList<DistanceRange> darListaRangosDistancia(String fecha, String horaInicial, String horaFinal) {
 		// TODO Auto-generated method stub
-		return null;
+		
+		LocalDate date = Utils.obtainLocalDateObject(fecha);
+		LocalTime initialTime = Utils.obtainLocalTimeObject(horaInicial);
+		LocalTime endTime = Utils.obtainLocalTimeObject(horaFinal);
+		
+		DistanceRange distanceRange;
+		DistanceRange aux;
+		LinkedList<DistanceRange> distanceRangeList = new List<>();
+		double miles;
+		//LocalDate date = LocalDate.of
+		for(Service s:this.services){
+			if((s.getTripStart().toLocalDate().isEqual(date) && s.getTripEnd().toLocalDate().isEqual(date))&& (s.getTripStart().toLocalTime().compareTo(initialTime) == 0 || s.getTripStart().toLocalTime().compareTo(initialTime)>0)&&(s.getTripEnd().toLocalTime().compareTo(endTime) == 0 || s.getTripEnd().toLocalTime().compareTo(endTime)<0)){
+				
+				miles = s.getTripMiles();
+				System.out.println();
+				System.out.println("Miles: "+miles);
+				int roundedMiles = (int) Math.round(miles);
+				double nextDown = Math.floor(miles);
+				double nextUp = Math.ceil(miles);
+				
+				System.out.println("Next down: "+nextDown);
+				System.out.println("Next up: "+nextUp);
+				System.out.println("Rounded miles: "+roundedMiles);
+				distanceRange = new DistanceRange(nextUp, nextDown);
+				aux = distanceRangeList.get(distanceRange);
+				if(aux == null){
+					distanceRangeList.addInOrder(distanceRange);
+					distanceRange.addService(s);
+				}else {
+					distanceRange = aux;
+					distanceRange.addService(s);
+				}
+			}
+		}
+		
+		
+		return distanceRangeList;
 	}
 
 
