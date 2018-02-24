@@ -333,14 +333,23 @@ public class TaxiTripsManagerView {
 				LinkedList<CompanyByDateRange> lista2C= Controller.companiasMasServicios(rango2C, n2C);
 				//TODO
 				//Mostrar la informacion de acuerdo al enunciado				
-
+				
+				System.out.println();
+				System.out.println("TOP "+n2C+" COMPAÑIAS:");
+				System.out.println();
+				for(CompanyByDateRange c:lista2C) {
+					System.out.println(c.toString());
+					System.out.println();
+				}
+				System.out.println();
 				break;
 
 			case 11: //3C
 				LinkedList<CompanyTaxi> lista3C=Controller.taxisMasRentables();
+				
 				//TODO
 				//Mostrar la informacion de acuerdo al enunciado				
-
+				
 				break;
 
 			case 12: //4C

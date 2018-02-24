@@ -23,6 +23,8 @@ import model.data_structures.LinkedList;
 import model.data_structures.List;
 import model.data_structures.Queue;
 import model.logic.utils.Utils;
+import model.sort.Insertion;
+import model.sort.Merge;
 import model.world.CommunityAreaByDateRange;
 import model.world.Company;
 import model.world.CompanyByDateRange;
@@ -264,11 +266,11 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 		}
 		
 		//ACA CHEQUEO ISNTANCIAMIENTO CORRECTO DEL MUNDO
-		/*
+		
 		System.out.println("COMPAÑIAS:");
 		for(Company c: this.companies) {
 			System.out.println(c.toString());
-		}*/
+		}
 		/*
 		for(Taxi t:this.taxis) {
 			System.out.println("Taxi ID: "+t.getTaxiId().toString());
@@ -471,7 +473,40 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 	@Override
 	public LinkedList<CompanyByDateRange> companiasMasServicios(DateTimeRange rango, int n) {
 		// TODO Auto-generated method stub
-		return null;
+		
+		//Check if its necesarry to associate companies to their services list directly for a better algorithm
+		int contServicios=0;
+		LocalDateTime array[] = Utils.convertDateTimeRangeToLocalDateTimeArray(rango);
+		LocalDateTime initialDate = array[0];
+		LocalDateTime endDate = array[1];
+		
+		CompanyByDateRange companyByDate;
+		LinkedList<CompanyByDateRange> companyByDateList = new List<CompanyByDateRange>();
+		LinkedList<CompanyByDateRange> sortedList = new List<>();
+		
+		for(Company c:this.companies) {
+			companyByDate = new CompanyByDateRange(c.getName());
+			companyByDateList.add(companyByDate);
+			for(Taxi t:c.getTaxis()) {
+				for(Service s: t.getServices()) {
+					if(((s.getTripStart().compareTo(initialDate) > 0 || s.getTripStart().compareTo(initialDate) == 0) && (s.getTripStart().compareTo(endDate) < 0 || s.getTripStart().compareTo(endDate)==0)) 
+							&& ((s.getTripEnd().compareTo(initialDate) > 0 || s.getTripEnd().compareTo(initialDate) == 0) && (s.getTripEnd().compareTo(endDate) < 0 || s.getTripEnd().compareTo(endDate)==0))){
+						companyByDate.addService(s);
+					}
+				}
+			}
+		}
+		CompanyByDateRange[] arrayCompanyByDate = new CompanyByDateRange[companyByDateList.size()];
+		for(int i=0;i<arrayCompanyByDate.length;i++) {
+			arrayCompanyByDate[i] = companyByDateList.get(i);
+		}
+		System.out.println();
+		Comparator comparator = new CompanyByDateRange.NumberOfServicesReverseComparator();
+		Insertion.sort(arrayCompanyByDate, comparator);
+		for(int i=0;i<n;i++) { //Fill up the list with CompanyByDateRange objects up to the "top n" number received as a parameter
+			sortedList.add(arrayCompanyByDate[i]);
+		}
+		return sortedList;
 	}
 
 
