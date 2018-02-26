@@ -117,7 +117,7 @@ public class TaxiTripsManagerView {
 			case 3: //2A
 
 				//comany
-				System.out.println("Ingrese el nombre de la compa��a");
+				System.out.println("Ingrese el nombre de la compañia");
 				String companyReq2A = sc.nextLine();
 				companyReq2A = sc.nextLine();
 				System.out.println("NOMBRE COMPAÑIA: "+companyReq2A);

@@ -25,7 +25,7 @@ public interface ITaxiTripsManager {
 	 * @param direccionJson, ubicaci�n del json a cargar
 	 * @return true si se lo logr� cargar, false de lo contrario
 	 */
-	public boolean cargarSistema(String direccionJson);
+	public boolean cargarSistema(String[] direccionJson);
 	//1A
 	/**
 	 * Generar	una	Cola con	 todos	los	servicios	de	 taxi	que	se	prestaron	en	un	periodo	de	

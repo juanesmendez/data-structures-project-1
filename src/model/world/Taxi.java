@@ -54,7 +54,7 @@ public class Taxi implements Comparable<Taxi>{
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return "Taxi ID: "+this.taxiId+"\n "+this.company.toString();
+		return "Taxi ID: "+this.taxiId+"\n"+this.company.toString()+"\nNumber of services: "+this.services.size();
 	}
 
 	@Override
@@ -85,7 +85,7 @@ public class Taxi implements Comparable<Taxi>{
 		//Check if its necessary to verify if the Service already exists;
 		
 		//this.services.add(service);
-		this.services.addInOrder(service);
+		this.services.add(service); //Order doesn't matter, nust adds them to the list
 	}
 }
 
