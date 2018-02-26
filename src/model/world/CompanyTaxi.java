@@ -26,6 +26,12 @@ public class CompanyTaxi implements Comparable<CompanyTaxi> {
 	}
 
 	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "Company name: "+this.companyName+"\nTaxi: "+this.taxi.getTaxiId();
+	}
+	
+	@Override
 	public int compareTo(CompanyTaxi companyTaxi) {
 		// TODO Auto-generated method stub
 		if(this.companyName.compareTo(companyTaxi.getCompanyName())<0) {

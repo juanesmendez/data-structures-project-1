@@ -349,6 +349,10 @@ public class TaxiTripsManagerView {
 				
 				//TODO
 				//Mostrar la informacion de acuerdo al enunciado				
+				for(CompanyTaxi ct:lista3C) {
+					System.out.println(ct.toString());
+					System.out.println();
+				}
 				
 				break;
 

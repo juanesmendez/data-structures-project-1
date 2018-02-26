@@ -502,7 +502,7 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 		}
 		System.out.println();
 		Comparator comparator = new CompanyByDateRange.NumberOfServicesReverseComparator();
-		Insertion.sort(arrayCompanyByDate, comparator);
+		Insertion.sort(arrayCompanyByDate, comparator); //I use Insertion sort, check later if another soprting algorithm works better.
 		for(int i=0;i<n;i++) { //Fill up the list with CompanyByDateRange objects up to the "top n" number received as a parameter
 			sortedList.add(arrayCompanyByDate[i]);
 		}
@@ -513,7 +513,33 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 	@Override
 	public LinkedList<CompanyTaxi> taxisMasRentables() {
 		// TODO Auto-generated method stub
-		return null;
+		double totalMoneyEarned;
+		double totalDistanceTraveled;
+		double relation;
+		double greatestRelation=0;
+		
+		LinkedList<CompanyTaxi> companyTaxiList = new List<CompanyTaxi>();
+		CompanyTaxi companyTaxi=null;
+		for(Company c: this.companies) {
+			greatestRelation = 0;
+			for(Taxi t: c.getTaxis()) {
+				totalMoneyEarned = 0;
+				totalDistanceTraveled = 0;
+				for(Service s:t.getServices()) {
+					totalMoneyEarned += s.getTripTotal();
+					totalDistanceTraveled += s.getTripMiles();
+				}
+				relation = totalMoneyEarned/totalDistanceTraveled;
+				if(relation > greatestRelation) {
+					greatestRelation = relation;
+					companyTaxi = new CompanyTaxi(c.getName(), t);
+				}
+			}
+			companyTaxiList.add(companyTaxi);
+			
+		}
+
+		return companyTaxiList;
 	}
 
 
