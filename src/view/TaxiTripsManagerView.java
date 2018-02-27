@@ -361,7 +361,9 @@ public class TaxiTripsManagerView {
 				//id taxi
 				System.out.println("Ingrese el id del taxi");
 				String idTaxi4C=sc.next();
-
+				
+				System.out.println("Ingrese el valor maximo de la suma de millas recorridas por servicio resumen:");
+				int n4C = sc.nextInt();
 				//fecha 
 				System.out.println("Ingrese la fecha inicial (Ej : 2017-02-01)");
 				String fechaReq4C = sc.next();
@@ -374,10 +376,15 @@ public class TaxiTripsManagerView {
 				System.out.println("Ingrese la hora final (Ej: 09:00:00.000)");
 				String horaFinalReq4C = sc.next();
 
-				IStack <Service> resp4C=Controller.darServicioResumen(idTaxi4C, horaInicialReq4C, horaFinalReq4C, fechaReq4C);
+				IStack <Service> resp4C=Controller.darServicioResumen(idTaxi4C, horaInicialReq4C, horaFinalReq4C, fechaReq4C, n4C);
 				//TODO
 				//Mostrar la informacion de acuerdo al enunciado				
-
+				for(Service s: resp4C) {
+					System.out.println(s.toString());
+					System.out.println();
+				}
+				
+				
 				break;
 
 			case 13: //salir

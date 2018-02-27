@@ -164,4 +164,22 @@ public class Service implements Comparable<Service> {
 		}
 
 	}
+	
+	public static class TripStartReverseComparator implements Comparator<Service> {
+
+		@Override
+		public int compare(Service s1, Service s2) {
+			// TODO Auto-generated method stub
+			if(s1.getTripStart().isBefore(s2.getTripStart())) {
+				return 1;
+			}else {
+				if(s1.getTripStart().isAfter(s2.getTripStart())) {
+					return -1;
+				}
+			}
+			
+			return 0;
+		}
+
+	}
 }

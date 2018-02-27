@@ -81,7 +81,7 @@ public class Controller {
 		return manager.taxisMasRentables();
 	}
 	
-	public static IStack <Service> darServicioResumen(String idTaxi4C, String horaInicialReq4C, String horaFinalReq4C, String fechaReq4C){
-		return manager.darServicioResumen(idTaxi4C, horaInicialReq4C, horaFinalReq4C, fechaReq4C);
+	public static IStack <Service> darServicioResumen(String idTaxi4C, String horaInicialReq4C, String horaFinalReq4C, String fechaReq4C, int maxMillas){
+		return manager.darServicioResumen(idTaxi4C, horaInicialReq4C, horaFinalReq4C, fechaReq4C, maxMillas);
 	}
 }

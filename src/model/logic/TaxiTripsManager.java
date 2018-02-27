@@ -22,6 +22,7 @@ import model.data_structures.IStack;
 import model.data_structures.LinkedList;
 import model.data_structures.List;
 import model.data_structures.Queue;
+import model.data_structures.Stack;
 import model.logic.utils.Utils;
 import model.sort.Insertion;
 import model.sort.Merge;
@@ -574,9 +575,84 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 
 
 	@Override
-	public IStack<Service> darServicioResumen(String taxiId, String horaInicial, String horaFinal, String fecha) {
+	public IStack<Service> darServicioResumen(String taxiId, String horaInicial, String horaFinal, String fecha, int maxMillas) {
 		// TODO Auto-generated method stub
-		return null;
+		
+		LocalDate date = Utils.obtainLocalDateObject(fecha);
+		LocalTime initialTime = Utils.obtainLocalTimeObject(horaInicial);
+		LocalTime endTime = Utils.obtainLocalTimeObject(horaFinal);
+		
+		LinkedList<Service> listaAux = new List<>();
+		IStack<Service> stack = new Stack<>();
+		IStack<Service> stackCompressedServices = new Stack<>();
+		Comparator<Service> comparator = new Service.TripStartReverseComparator();
+		
+		double contMillas = 0;
+		int idCompressedService = 0;
+		Service auxService = null;
+		Service compressedService;
+		
+		LocalDateTime menorTripStart;
+		LocalDateTime mayorTripEnd;
+		double sumatoriaDistancia;
+		int sumatoriaTripSeconds;
+		double sumatoriaTripTotal;
+		
+		Taxi taxiAux = new Taxi(taxiId);
+		Taxi taxi = this.taxis.get(taxiAux); //I search for the taxi in the taxis list.
+		
+
+		for(Service s:taxi.getServices()) {
+			if((s.getTripStart().toLocalDate().equals(date) && s.getTripEnd().toLocalDate().equals(date)) && (s.getTripStart().toLocalTime().compareTo(initialTime) == 0 || s.getTripStart().toLocalTime().compareTo(initialTime)>0)
+					&&(s.getTripEnd().toLocalTime().compareTo(endTime) == 0 || s.getTripEnd().toLocalTime().compareTo(endTime)<0)) {
+				listaAux.add(s, comparator);
+			}
+		}
+
+
+		for(Service s:listaAux) {
+			stack.push(s);
+			contMillas += s.getTripMiles();
+			if(contMillas >= maxMillas) {
+				menorTripStart = LocalDateTime.now();
+				mayorTripEnd = LocalDateTime.of(2000, 11, 11, 11, 30, 0, 0);
+				sumatoriaDistancia = 0;
+				sumatoriaTripSeconds = 0;
+				sumatoriaTripTotal = 0;
+				while(contMillas > 0) { //Check why its no geater than the N amount
+					auxService = stack.pop();
+					System.out.println("contadorMillas: "+ contMillas);
+					contMillas -= auxService.getTripMiles();
+					
+					if(s.getTripStart().isBefore(menorTripStart)) {
+						menorTripStart = s.getTripStart();
+					}
+					if(s.getTripEnd().isAfter(mayorTripEnd)) {
+						mayorTripEnd = s.getTripEnd();
+					}
+					sumatoriaDistancia += auxService.getTripMiles();
+					sumatoriaTripSeconds += auxService.getTripSeconds();
+					sumatoriaTripTotal += auxService.getTripTotal();
+					
+				}
+				compressedService = new Service("Compressed Service "+idCompressedService, s.getCompany(), 0, 0, "N/A", 0, 0, mayorTripEnd, menorTripStart, 0, 0, sumatoriaTripSeconds, sumatoriaDistancia, sumatoriaTripTotal);
+				compressedService.setTaxi(taxi);
+				stackCompressedServices.push(compressedService);
+				idCompressedService++;
+			}
+		}
+		while(!stackCompressedServices.isEmpty()) {
+			stack.push(stackCompressedServices.pop());
+		}
+		listaAux = new List<Service>();
+		while(!stack.isEmpty()) {
+			listaAux.add(stack.pop(), comparator);
+		}
+		for(Service s: listaAux) {
+			stack.push(s);
+		}
+		
+		return stack;
 	}
 
 	

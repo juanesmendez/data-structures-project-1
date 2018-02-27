@@ -134,7 +134,7 @@ public interface ITaxiTripsManager {
 	 * los servicios generados por el taxi en orden cronol�gico, entre una hora inicial y una hora
 	 * final, en una fecha determinada.
 	 */
-	public IStack <Service> darServicioResumen(String taxiId, String horaInicial, String horaFinal, String fecha);
+	public IStack <Service> darServicioResumen(String taxiId, String horaInicial, String horaFinal, String fecha, int maxMillas);
 
 
 
