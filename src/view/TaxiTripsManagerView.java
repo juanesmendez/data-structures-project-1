@@ -221,6 +221,14 @@ public class TaxiTripsManagerView {
 
 			case 6: //1B
 				LinkedList<Company> lista=Controller.darCompaniasTaxisInscritos();
+				
+				System.out.println("Number of companies with at least 1 taxi: "+lista.size());
+				
+				for (Company l:lista)
+				{
+					
+					System.out.println("Company name: "+l.getName()+"\t\t Amount of Taxis: "+l.getTaxis().size());
+				}
 				//TODO
 				//Mostrar la informacion de acuerdo al enunciado
 				break;

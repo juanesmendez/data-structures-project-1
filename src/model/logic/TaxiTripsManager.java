@@ -476,28 +476,156 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 	@Override
 	public LinkedList<Company> darCompaniasTaxisInscritos() {
 		// TODO Auto-generated method stub
-		return null;
+		LinkedList <Company> companyList = new List<>();
+		
+		for (Company c: this.companies)
+		{
+			if (c.getTaxis().size()>0)
+			{
+				companyList.addInOrder(c);
+			}
+		}
+		
+		return companyList;
 	}
 
 
 	@Override
 	public Taxi darTaxiMayorFacturacion(DateTimeRange rango, String nomCompania) {
 		// TODO Auto-generated method stub
-		return null;
+		Company comp;
+		Company compParam = new Company (nomCompania);
+		Taxi taxi = null;
+		
+		float mayor = 0;
+		float contFareServices=0;
+		
+		LocalDateTime array[] = Utils.convertDateTimeRangeToLocalDateTimeArray(rango);
+		LocalDateTime initialDate = array[0];
+		LocalDateTime endDate = array[1];
+		comp = this.companies.get(compParam);
+		
+		if (comp != null)
+		{
+			for (Taxi t:comp.getTaxis())
+			{
+				
+				System.out.println("Taxi ID :"+t.getTaxiId());
+				for(Service s:t.getServices()) {
+					if(((s.getTripStart().compareTo(initialDate) > 0 || s.getTripStart().compareTo(initialDate) == 0) && (s.getTripStart().compareTo(endDate) < 0 || s.getTripStart().compareTo(endDate)==0)) 
+							&& ((s.getTripEnd().compareTo(initialDate) > 0 || s.getTripEnd().compareTo(initialDate) == 0) && (s.getTripEnd().compareTo(endDate) < 0 || s.getTripEnd().compareTo(endDate)==0))) {
+						contFareServices+=s.getFare();	
+						
+					}
+				}
+				System.out.println("\t\tContador cuenta servicios: "+ contFareServices);
+				if(contFareServices > mayor) {
+					mayor = contFareServices;
+					taxi = t;
+				}
+		
+			
+			//Check if it is better to create a new Taxi object with the number of services between the range received as a parameter..
+			}
+		}
+		else 
+			{
+				System.out.println("No se encontro la compañia");
+			}
+		System.out.println();
+		System.out.println("Taxi con mayor facturacion: "+ taxi.getTaxiId()+ "\t\t Facturacion total: "+mayor);
+		System.out.println();
+		return taxi;
 	}
 
 
 	@Override
 	public ServicesValuePayed[] darServiciosZonaValorTotal(DateTimeRange rango, String idZona) {
 		// TODO Auto-generated method stub
-		return null;
+		ServicesValuePayed[] zonaServ = null;
+		
+		
+		LocalDateTime array[] = Utils.convertDateTimeRangeToLocalDateTimeArray(rango);
+		LocalDateTime initialDate = array[0];
+		LocalDateTime endDate = array[1];
+		
+		int numServiciosRecogidos = 0;
+		float valorTotalPagadoR =0;
+		
+		int numServiciosRecogidosYTerminados = 0;
+		float valorTotalPagadoRT = 0;
+		
+		int numServiciosRecogidosEnOtraArea = 0;
+		float valorTotal = 0;
+		
+		int codArea = Integer.parseInt(idZona);
+		
+		if (services.size()!=0)
+		{
+			for (Service s: this.services)
+			{
+				if (s.getPickupCommunityArea()==codArea)
+				{
+					if (s.getDropoffCommunityArea()!=codArea)
+					{
+						if(((s.getTripStart().compareTo(initialDate) > 0 || s.getTripStart().compareTo(initialDate) == 0) && (s.getTripStart().compareTo(endDate) < 0 || s.getTripStart().compareTo(endDate)==0)) 
+								&& ((s.getTripEnd().compareTo(initialDate) > 0 || s.getTripEnd().compareTo(initialDate) == 0) && (s.getTripEnd().compareTo(endDate) < 0 || s.getTripEnd().compareTo(endDate)==0)))
+						{
+							
+							
+							numServiciosRecogidos++;
+							valorTotalPagadoR+=s.getFare();
+						}
+					}
+					
+					if(s.getDropoffCommunityArea()==codArea)
+					{
+						if(((s.getTripStart().compareTo(initialDate) > 0 || s.getTripStart().compareTo(initialDate) == 0) && (s.getTripStart().compareTo(endDate) < 0 || s.getTripStart().compareTo(endDate)==0)) 
+								&& ((s.getTripEnd().compareTo(initialDate) > 0 || s.getTripEnd().compareTo(initialDate) == 0) && (s.getTripEnd().compareTo(endDate) < 0 || s.getTripEnd().compareTo(endDate)==0)))
+						{
+							numServiciosRecogidosYTerminados++;
+							valorTotalPagadoRT += s.getFare();
+						}
+					}
+					
+				}
+				
+				if (s.getPickupCommunityArea()!=codArea)
+				{
+					if (s.getPickupCommunityArea()==codArea)
+					{
+						if(((s.getTripStart().compareTo(initialDate) > 0 || s.getTripStart().compareTo(initialDate) == 0) && (s.getTripStart().compareTo(endDate) < 0 || s.getTripStart().compareTo(endDate)==0)) 
+								&& ((s.getTripEnd().compareTo(initialDate) > 0 || s.getTripEnd().compareTo(initialDate) == 0) && (s.getTripEnd().compareTo(endDate) < 0 || s.getTripEnd().compareTo(endDate)==0)))
+						{
+							numServiciosRecogidosEnOtraArea++;
+							valorTotal+=s.getFare();
+						}
+					}
+				}
+				
+			}
+		}
+	
+		
+		
+		
+		
+		
+		return zonaServ;
 	}
 
 
 	@Override
 	public LinkedList<CommunityAreaByDateRange> darZonasServicios(DateTimeRange rango) {
 		// TODO Auto-generated method stub
-		return null;
+		LinkedList <CommunityAreaByDateRange> comArea = new List<>();
+		
+		for (Service s: this.services)
+		{
+			
+		}
+		
+		return comArea;
 	}
 
 
