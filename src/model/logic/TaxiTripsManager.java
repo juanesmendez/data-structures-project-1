@@ -16,6 +16,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.sun.xml.internal.fastinfoset.util.ValueArrayResourceException;
+
 import api.ITaxiTripsManager;
 import model.data_structures.IQueue;
 import model.data_structures.IStack;
@@ -510,7 +512,7 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 			for (Taxi t:comp.getTaxis())
 			{
 				
-				System.out.println("Taxi ID :"+t.getTaxiId());
+				//System.out.println("Taxi ID :"+t.getTaxiId());
 				for(Service s:t.getServices()) {
 					if(((s.getTripStart().compareTo(initialDate) > 0 || s.getTripStart().compareTo(initialDate) == 0) && (s.getTripStart().compareTo(endDate) < 0 || s.getTripStart().compareTo(endDate)==0)) 
 							&& ((s.getTripEnd().compareTo(initialDate) > 0 || s.getTripEnd().compareTo(initialDate) == 0) && (s.getTripEnd().compareTo(endDate) < 0 || s.getTripEnd().compareTo(endDate)==0))) {
@@ -518,7 +520,7 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 						
 					}
 				}
-				System.out.println("\t\tContador cuenta servicios: "+ contFareServices);
+				//System.out.println("\t\tContador cuenta servicios: "+ contFareServices);
 				if(contFareServices > mayor) {
 					mayor = contFareServices;
 					taxi = t;
@@ -542,20 +544,20 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 	@Override
 	public ServicesValuePayed[] darServiciosZonaValorTotal(DateTimeRange rango, String idZona) {
 		// TODO Auto-generated method stub
-		ServicesValuePayed[] zonaServ = null;
-		
+		ServicesValuePayed[] zonaServ = new ServicesValuePayed[3];
+		List<Service> zonaRecogido = new List<Service>();
+		List<Service> zonaRecogidoYTer = new List<Service>();
+		List<Service> zonaRecogidoEnOtra = new List<Service>();
 		
 		LocalDateTime array[] = Utils.convertDateTimeRangeToLocalDateTimeArray(rango);
 		LocalDateTime initialDate = array[0];
 		LocalDateTime endDate = array[1];
 		
-		int numServiciosRecogidos = 0;
+		
 		float valorTotalPagadoR =0;
 		
-		int numServiciosRecogidosYTerminados = 0;
 		float valorTotalPagadoRT = 0;
 		
-		int numServiciosRecogidosEnOtraArea = 0;
 		float valorTotal = 0;
 		
 		int codArea = Integer.parseInt(idZona);
@@ -573,8 +575,10 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 						{
 							
 							
-							numServiciosRecogidos++;
+							zonaRecogido.addInOrder(s);
 							valorTotalPagadoR+=s.getFare();
+							
+							
 						}
 					}
 					
@@ -583,7 +587,7 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 						if(((s.getTripStart().compareTo(initialDate) > 0 || s.getTripStart().compareTo(initialDate) == 0) && (s.getTripStart().compareTo(endDate) < 0 || s.getTripStart().compareTo(endDate)==0)) 
 								&& ((s.getTripEnd().compareTo(initialDate) > 0 || s.getTripEnd().compareTo(initialDate) == 0) && (s.getTripEnd().compareTo(endDate) < 0 || s.getTripEnd().compareTo(endDate)==0)))
 						{
-							numServiciosRecogidosYTerminados++;
+							zonaRecogidoYTer.addInOrder(s);
 							valorTotalPagadoRT += s.getFare();
 						}
 					}
@@ -597,19 +601,64 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 						if(((s.getTripStart().compareTo(initialDate) > 0 || s.getTripStart().compareTo(initialDate) == 0) && (s.getTripStart().compareTo(endDate) < 0 || s.getTripStart().compareTo(endDate)==0)) 
 								&& ((s.getTripEnd().compareTo(initialDate) > 0 || s.getTripEnd().compareTo(initialDate) == 0) && (s.getTripEnd().compareTo(endDate) < 0 || s.getTripEnd().compareTo(endDate)==0)))
 						{
-							numServiciosRecogidosEnOtraArea++;
+							zonaRecogidoEnOtra.addInOrder(s);
 							valorTotal+=s.getFare();
 						}
 					}
 				}
 				
 			}
+			zonaServ[0] = new ServicesValuePayed(valorTotalPagadoR);
+			zonaServ[0].setAssociatedServices(zonaRecogido);
+			
+			zonaServ[1] = new ServicesValuePayed(valorTotalPagadoRT);
+			zonaServ[1].setAssociatedServices(zonaRecogidoYTer);
+			
+			zonaServ[2] = new ServicesValuePayed(valorTotal);
+			zonaServ[2].setAssociatedServices(zonaRecogidoEnOtra);
+			
 		}
 	
 		
 		
+		System.out.println("Valor total de servicios recogidos en la zona y terminados en otra: "+zonaServ[0].getAccumulatedValue()+"\nLa lista de servicios en esa zona, en ese rango de tiempo es: ");
+		for(Service s: zonaServ[0].getAssociatedServices())
+		{
+			if(zonaServ[0].getAssociatedServices().size()!=0)
+			{
+			System.out.println(s.getTripId());
+			}
+			else
+			{
+				System.out.println("No hay servicios");
+			}
+		}
 		
+		System.out.println("Valor total de servicios recogidos y terminados en la zona: "+zonaServ[1].getAccumulatedValue()+"\nLa lista de servicios en esa zona, en ese rango de tiempo es: ");
+		for(Service s: zonaServ[1].getAssociatedServices())
+		{
+			if(zonaServ[1].getAssociatedServices().size()!=0)
+			{
+			System.out.println(s.getTripId());
+			}
+			else
+			{
+			System.out.println("No hay servicios");
+			}
+		}
 		
+		System.out.println("Valor total de servicios recogidos en otra zona y terminados en la zona buscada: "+zonaServ[2].getAccumulatedValue()+"\nLa lista de servicios en esa zona, en ese rango de tiempo es: ");
+		for(Service s: zonaServ[2].getAssociatedServices())
+		{
+			if(zonaServ[2].getAssociatedServices().size()!=0)
+			{
+			System.out.println(s.getTripId());
+			}
+			else
+			{
+			System.out.println("No hay servicios");
+			}
+		}
 		
 		return zonaServ;
 	}
