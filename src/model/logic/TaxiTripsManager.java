@@ -34,6 +34,7 @@ import model.world.DateTimeRange;
 import model.world.DistanceRange;
 import model.world.InfoTaxiRange;
 import model.world.Service;
+import model.world.ServicesByDate;
 import model.world.ServicesValuePayed;
 import model.world.Taxi;
 
@@ -667,14 +668,78 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 
 
 	@Override
-	public LinkedList<CommunityAreaByDateRange> darZonasServicios(DateTimeRange rango) {
+	public LinkedList<CommunityAreaByDateRange> darZonasServicios(DateTimeRange rango)  {
 		// TODO Auto-generated method stub
 		LinkedList <CommunityAreaByDateRange> comArea = new List<>();
 		
+		LocalDateTime array[] = Utils.convertDateTimeRangeToLocalDateTimeArray(rango);
+		LocalDateTime initialDate = array[0];
+		LocalDateTime endDate = array[1];
+		
+		CommunityAreaByDateRange comAreaId;
+		CommunityAreaByDateRange aux = null;
+		
+		List <Service> listaS= new List <Service>();
+		
+		int numServicios=0;
+		
 		for (Service s: this.services)
 		{
+			comAreaId = new CommunityAreaByDateRange(s.getDropoffCommunityArea());
 			
+			
+			if (comArea.size()==0)
+			{
+				comArea.addInOrder(comAreaId);
+			}
+			else 
+			{
+				for (CommunityAreaByDateRange c: comArea)
+				{
+					aux = comArea.get(comAreaId);
+				
+					if (aux == null)
+					{
+						comArea.addInOrder(comAreaId);
+						if(((s.getTripStart().compareTo(initialDate) > 0 || s.getTripStart().compareTo(initialDate) == 0) && (s.getTripStart().compareTo(endDate) < 0 || s.getTripStart().compareTo(endDate)==0)) 
+								&& ((s.getTripEnd().compareTo(initialDate) > 0 || s.getTripEnd().compareTo(initialDate) == 0) && (s.getTripEnd().compareTo(endDate) < 0 || s.getTripEnd().compareTo(endDate)==0)))
+						{
+							numServicios++;
+							ServicesByDate ss = new ServicesByDate(initialDate, numServicios);
+							listaS.addInOrder(s);
+							ss.setAssociatedServices(listaS);
+							comAreaId.getServicesDates().addInOrder(ss);
+						}
+						System.out.println("El id de esta área es: "+comAreaId.getIdCommunityArea());
+						System.out.println("La lista de servicios de esta área (en el rango de horas buscado) es: ");
+						for (ServicesByDate sss: comAreaId.getServicesDates())
+						{
+							
+							if (sss.getNumServices()!=0)
+							{
+								for (Service ssss: sss.getAssociatedServices())
+								{
+									System.out.println(ssss.getTripId());
+								}
+							}
+							else
+							{
+								System.out.println("Esta área no cuenta con servicios en el rango de horas buscado.");
+							}
+						}
+					
+					}
+					else 
+					{
+						comAreaId = aux;
+					}
+	
+				}
+			}
+
 		}
+		
+		
 		
 		return comArea;
 	}

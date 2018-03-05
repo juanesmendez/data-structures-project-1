@@ -1,1 +1,5 @@
+/api/
+/controller/
 /model/
+/persistencia/
+/view/
