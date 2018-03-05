@@ -26,6 +26,8 @@ import model.data_structures.Stack;
 import model.logic.utils.Utils;
 import model.sort.Insertion;
 import model.sort.Merge;
+import model.sort.Quick;
+import model.sort.Quick3way;
 import model.world.CommunityAreaByDateRange;
 import model.world.Company;
 import model.world.CompanyByDateRange;
@@ -338,13 +340,40 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 		
 		Comparator<Service> comparator = new Service.TripStartComparator();
 		
+		Service[] arrayServices = new Service[this.services.size()];
+		int sizeArray = 0;
+		/*
+		for(int i=0;i<services.size();i++) { //Is there a way to make this more efficient?
+			arrayServices[i] = services.get(i);
+			System.out.println(sizeArray++);
+		}*/
+		Iterator it = services.iterator();
+		int j=0;
+		while(it.hasNext()) {
+			arrayServices[j] = (Service) it.next();
+			j++;
+		}
+		
+		Quick.sort(arrayServices, comparator);
+		
+		for(int i=0;i<arrayServices.length;i++) {
+			if(((arrayServices[i].getTripStart().compareTo(initialDate) > 0 || arrayServices[i].getTripStart().compareTo(initialDate) == 0) && (arrayServices[i].getTripStart().compareTo(endDate) < 0 || arrayServices[i].getTripStart().compareTo(endDate)==0)) 
+					&& ((arrayServices[i].getTripEnd().compareTo(initialDate) > 0 || arrayServices[i].getTripEnd().compareTo(initialDate) == 0) && (arrayServices[i].getTripEnd().compareTo(endDate) < 0 || arrayServices[i].getTripEnd().compareTo(endDate)==0))) {
+				
+				listaAux.add(arrayServices[i]);
+			}
+			if(arrayServices[i].getTripStart().isAfter(endDate)) {
+				break;
+			}
+		}
+		/*
 		for(Service s:this.services) {
 			if(((s.getTripStart().compareTo(initialDate) > 0 || s.getTripStart().compareTo(initialDate) == 0) && (s.getTripStart().compareTo(endDate) < 0 || s.getTripStart().compareTo(endDate)==0)) 
 					&& ((s.getTripEnd().compareTo(initialDate) > 0 || s.getTripEnd().compareTo(initialDate) == 0) && (s.getTripEnd().compareTo(endDate) < 0 || s.getTripEnd().compareTo(endDate)==0))) {
 				
 				listaAux.add(s, comparator);
 			}
-		}
+		}*/
 		for(Service s:listaAux) {
 			cola.enqueue(s);
 		}
