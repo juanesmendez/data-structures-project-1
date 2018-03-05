@@ -255,6 +255,9 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 
 					//System.out.println("Trip start timestamp: " +tripStart.toString());
 					aux = (String) jsonObject.get("trip_total");
+					if(aux==null) {
+						aux = "0";
+					}
 					tripTotal = Float.parseFloat(aux);
 					//System.out.println("Trip total: "+tripTotal);
 
