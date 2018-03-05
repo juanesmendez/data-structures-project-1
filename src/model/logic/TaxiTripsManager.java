@@ -16,8 +16,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import com.sun.xml.internal.fastinfoset.util.ValueArrayResourceException;
-
 import api.ITaxiTripsManager;
 import model.data_structures.IQueue;
 import model.data_structures.IStack;
@@ -225,7 +223,7 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 						aux = "0";
 					}
 					tripMiles = Float.parseFloat(aux);
-					System.out.println("Trip Miles: "+tripMiles);
+					//System.out.println("Trip Miles: "+tripMiles);
 					aux = (String) jsonObject.get("trip_seconds");
 					if(aux == null) {
 						aux = "0";
@@ -294,11 +292,11 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 		}
 		
 		//ACA CHEQUEO ISNTANCIAMIENTO CORRECTO DEL MUNDO
-		
+		/*
 		System.out.println("COMPAÑIAS:");
 		for(Company c: this.companies) {
 			System.out.println(c.toString());
-		}
+		}*/
 		/*
 		for(Taxi t:this.taxis) {
 			System.out.println("Taxi ID: "+t.getTaxiId().toString());
@@ -379,6 +377,7 @@ public class TaxiTripsManager implements ITaxiTripsManager {
 				if(contServicios > mayor) {
 					mayor = contServicios;
 					taxi = t;
+					taxi.setTotalServicesInRange(mayor);
 				}
 			}
 		}else {

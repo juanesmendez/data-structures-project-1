@@ -8,6 +8,8 @@ public class Taxi implements Comparable<Taxi>{
 	private String taxiId;
 	private Company company;
 	private LinkedList<Service> services;
+	//Only used in requirement 2A
+	private int totalServicesInRange;
 	
 	public Taxi(String taxiId) {
 		this.taxiId = taxiId;
@@ -36,6 +38,15 @@ public class Taxi implements Comparable<Taxi>{
 	}
 
 	
+	
+	public int getTotalServicesInRange() {
+		return totalServicesInRange;
+	}
+
+	public void setTotalServicesInRange(int totalServicesInRange) {
+		this.totalServicesInRange = totalServicesInRange;
+	}
+
 	public LinkedList<Service> getServices() {
 		return services;
 	}

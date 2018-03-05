@@ -144,7 +144,7 @@ public class TaxiTripsManagerView {
 				
 				//TODO
 				//Muestre la info del taxi
-				System.out.println(taxiReq2A.toString());
+				System.out.println("Taxi ID: "+taxiReq2A.getTaxiId()+"\nCompany: "+taxiReq2A.getCompany().getName()+"\nTotal services in range: "+taxiReq2A.getTotalServicesInRange());
 				break;
 
 			case 4: //3A
